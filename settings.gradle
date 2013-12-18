@@ -1,2 +1,2 @@
-include "context", "rose", "jade", "pipe"
+include "context", "rose", "jade", "pipe", "test"
 

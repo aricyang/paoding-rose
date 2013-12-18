@@ -1,0 +1,27 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+version = ""
+/*
+repositories {
+    mavenLocal()
+    mavenCentral()
+}*/
+/*
+dependencies {
+    compile project(':rose')
+    compile project(':jade')
+    testCompile "junit:junit:4.7"
+    compile "javax.servlet:servlet-api:2.4"
+    compile "javax.servlet:jsp-api:2.0"
+    compile "com.metaparadigm:json-rpc:1.0"
+}*/
+
+task p(dependsOn: war) << {
+    copy {
+        from 'build/libs'
+        into '/home/aric/software/resin/webapps'
+    }
+}
