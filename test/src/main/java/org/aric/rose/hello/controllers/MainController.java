@@ -8,6 +8,7 @@ public class MainController {
 
     @Get("")
     public String main() {
-        return "redirect:/HelloRose/world";
+        System.out.println("xxxxxxxxxxxxxxxxxxx");
+        return "redirect:/world";
     }
 }

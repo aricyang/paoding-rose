@@ -12,7 +12,7 @@ public class WorldController {
 
     @Get("")
     public String index() {
-        return "@Every Thing is OK. <p><a href=\"/HelloRose/world/list\">list worlds</a>";
+        return "@Every Thing is OK. <p><a href=\"/world/list\">list worlds</a>";
     }
 
     @Get("list")

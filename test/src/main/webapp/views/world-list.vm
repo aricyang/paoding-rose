@@ -1,9 +1,9 @@
 #foreach($name in $worlds) 
    $velocityCount:&nbsp
-   Here is <a href="/HelloRose/world/prefix-$name">$name</a>.
+   Here is <a href="/world/prefix-$name">$name</a>.
    <br/>
 #end
 
 <p>
-<a href="/HelloRose">Home</a>
+<a href="/">Home</a>
 

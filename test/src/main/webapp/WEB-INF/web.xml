@@ -9,18 +9,20 @@
 		<param-name>log4jRefreshInterval</param-name>
 		<param-value>1000</param-value>
 	</context-param>
-    	<listener>
+
+    <listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-    	</listener>
-    	<filter>
+    </listener>
+
+    <filter>
 	 	<filter-name>rose</filter-name>
-       		<filter-class>net.paoding.rose.RoseFilter</filter-class>
-    	</filter>
-    	<filter-mapping>
-    		<filter-name>rose</filter-name>
-    		<url-pattern>/*</url-pattern>
-	    	<dispatcher>REQUEST</dispatcher>
-    		<dispatcher>FORWARD</dispatcher>
-	    	<dispatcher>INCLUDE</dispatcher>
-    	</filter-mapping>
+       	<filter-class>net.paoding.rose.RoseFilter</filter-class>
+    </filter>
+   	<filter-mapping>
+        <filter-name>rose</filter-name>
+    	<url-pattern>/*</url-pattern>
+	    <dispatcher>REQUEST</dispatcher>
+    	<dispatcher>FORWARD</dispatcher>
+	    <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
 </web-app>

@@ -3,5 +3,5 @@ Welcome to $name.
 Here is its index $index.
 
 <p>
-<a href="/HelloRose/world/list">Back</a><br>
-<a href="/HelloRose">Home</a>
+<a href="/world/list">Back</a><br>
+<a href="">Home</a>
