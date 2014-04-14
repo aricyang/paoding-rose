@@ -9,6 +9,8 @@ public class MainController {
     @Get("")
     public String main() {
         System.out.println("xxxxxxxxxxxxxxxxxxx");
-        return "redirect:/world";
+
+        return "index";
+        //return "redirect:/world";
     }
 }
