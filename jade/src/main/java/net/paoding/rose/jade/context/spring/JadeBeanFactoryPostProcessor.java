@@ -15,19 +15,9 @@
  */
 package net.paoding.rose.jade.context.spring;
 
-import java.beans.Statement;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import javax.sql.DataSource;
-
 import net.paoding.rose.jade.dataaccess.DataAccessFactory;
-import net.paoding.rose.jade.dataaccess.DataSourceFactory;
 import net.paoding.rose.jade.dataaccess.DataAccessFactoryAdapter;
+import net.paoding.rose.jade.dataaccess.DataSourceFactory;
 import net.paoding.rose.jade.rowmapper.DefaultRowMapperFactory;
 import net.paoding.rose.jade.rowmapper.RowMapperFactory;
 import net.paoding.rose.jade.statement.Interpreter;
@@ -36,7 +26,6 @@ import net.paoding.rose.jade.statement.StatementWrapperProvider;
 import net.paoding.rose.jade.statement.cached.CacheProvider;
 import net.paoding.rose.scanning.ResourceRef;
 import net.paoding.rose.scanning.RoseScanner;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,6 +41,14 @@ import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.util.ResourceUtils;
+
+import javax.sql.DataSource;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * {@link JadeBeanFactoryPostProcessor}
@@ -159,7 +156,7 @@ public class JadeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     /**
      * 开关属性前缀常量
      */
-    private static final String propertyPrefix = "jade.context.spring";;
+    private static final String propertyPrefix = "jade.context.spring";
 
     /**
      * 日志记录器
@@ -298,7 +295,8 @@ public class JadeBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
             logger.info("[jade] starting ...");
         }
 
-        // 1、获取标注rose标志的资源(ResourceRef)，即classes目录、在/META-INF/rose.properties或/META-INF/MENIFEST.MF配置了rose属性的jar包
+        // 1、获取标注rose标志的资源(ResourceRef)，即classes目录、
+        // 在/META-INF/rose.properties或/META-INF/MENIFEST.MF配置了rose属性的jar包
         final List<ResourceRef> resources = findRoseResources();
 
         // 2、从获取的资源(resources)中，把rose=*、rose=DAO、rose=dao的筛选出来，并以URL的形式返回

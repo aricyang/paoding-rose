@@ -15,14 +15,7 @@
  */
 package net.paoding.rose.jade.context.spring;
 
-import java.io.IOException;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import net.paoding.rose.jade.annotation.DAO;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
@@ -40,6 +33,12 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.Assert;
+
+import java.io.IOException;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * {@link JadeComponentProvider}用于查找一个目录或jar包下符合Jade规范的DAO接口。
@@ -165,7 +164,8 @@ public class JadeComponentProvider implements ResourceLoaderAware {
                 if (traceEnabled) {
                     logger.trace("[jade/find] scanning " + resource);
                 }
-                // resourcePatternResolver.getResources出来的classPathResources，metadataReader对其进行getInputStream的时候为什么返回null呢？
+                // resourcePatternResolver.getResources出来的classPathResources，
+                // metadataReader对其进行getInputStream的时候为什么返回null呢？
                 // 不得不做一个exists判断
                 if (!resource.exists()) {
                     if (debugEnabled) {
