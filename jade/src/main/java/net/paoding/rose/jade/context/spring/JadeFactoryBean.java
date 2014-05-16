@@ -15,8 +15,6 @@
  */
 package net.paoding.rose.jade.context.spring;
 
-import java.lang.reflect.Proxy;
-
 import net.paoding.rose.jade.context.JadeInvocationHandler;
 import net.paoding.rose.jade.dataaccess.DataAccessFactory;
 import net.paoding.rose.jade.rowmapper.RowMapperFactory;
@@ -24,11 +22,12 @@ import net.paoding.rose.jade.statement.DAOMetaData;
 import net.paoding.rose.jade.statement.InterpreterFactory;
 import net.paoding.rose.jade.statement.StatementWrapperProvider;
 import net.paoding.rose.jade.statement.cached.CacheProvider;
-
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+
+import java.lang.reflect.Proxy;
 
 /**
  * 
@@ -145,7 +144,6 @@ public class JadeFactoryBean implements FactoryBean, InitializingBean {
         try {
             DAOMetaData daoMetaData = new DAOMetaData(objectType);
             JadeInvocationHandler handler = new JadeInvocationHandler(
-                    //
                     daoMetaData, interpreterFactory, rowMapperFactory, dataAccessFactory,
                     cacheProvider, statementWrapperProvider);
             return Proxy.newProxyInstance(ClassUtils.getDefaultClassLoader(),

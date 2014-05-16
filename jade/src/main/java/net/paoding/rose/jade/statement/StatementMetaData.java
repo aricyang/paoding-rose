@@ -15,14 +15,14 @@
  */
 package net.paoding.rose.jade.statement;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.regex.Pattern;
-
 import net.paoding.rose.jade.annotation.SQL;
 import net.paoding.rose.jade.annotation.SQLParam;
 import net.paoding.rose.jade.annotation.SQLType;
 import net.paoding.rose.jade.annotation.ShardBy;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.regex.Pattern;
 
 /**
  * {@link StatementMetaData} 封装、缓存了一个DAO方法的相关信息
@@ -156,7 +156,6 @@ public class StatementMetaData {
     }
 
     private static Pattern[] SELECT_PATTERNS = new Pattern[] {
-            //
             Pattern.compile("^\\s*SELECT\\s+", Pattern.CASE_INSENSITIVE), //
             Pattern.compile("^\\s*SHOW\\s+", Pattern.CASE_INSENSITIVE), //
             Pattern.compile("^\\s*DESC\\s+", Pattern.CASE_INSENSITIVE), //

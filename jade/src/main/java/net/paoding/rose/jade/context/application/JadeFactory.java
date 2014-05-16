@@ -15,10 +15,6 @@
  */
 package net.paoding.rose.jade.context.application;
 
-import java.lang.reflect.Proxy;
-
-import javax.sql.DataSource;
-
 import net.paoding.rose.jade.context.JadeInvocationHandler;
 import net.paoding.rose.jade.dataaccess.DataAccessFactoryAdapter;
 import net.paoding.rose.jade.dataaccess.DataSourceFactory;
@@ -30,8 +26,10 @@ import net.paoding.rose.jade.statement.DefaultInterpreterFactory;
 import net.paoding.rose.jade.statement.Interpreter;
 import net.paoding.rose.jade.statement.StatementWrapperProvider;
 import net.paoding.rose.jade.statement.cached.CacheProvider;
-
 import org.springframework.util.ClassUtils;
+
+import javax.sql.DataSource;
+import java.lang.reflect.Proxy;
 
 /**
  * 
@@ -101,7 +99,6 @@ public class JadeFactory {
         try {
             DAOMetaData daoMetaData = new DAOMetaData(daoClass);
             JadeInvocationHandler handler = new JadeInvocationHandler(
-                    //
                     daoMetaData, interpreterFactory, rowMapperFactory, dataAccessFactory,
                     cacheProvider, statementWrapperProvider);
             ClassLoader classLoader = ClassUtils.getDefaultClassLoader();

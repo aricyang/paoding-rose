@@ -15,15 +15,14 @@
  */
 package net.paoding.rose.jade.statement;
 
-import java.sql.SQLSyntaxErrorException;
-import java.util.HashMap;
-import java.util.Map;
-
 import net.paoding.rose.jade.statement.expression.ExqlPattern;
 import net.paoding.rose.jade.statement.expression.impl.ExqlContextImpl;
 import net.paoding.rose.jade.statement.expression.impl.ExqlPatternImpl;
-
 import org.springframework.jdbc.BadSqlGrammarException;
+
+import java.sql.SQLSyntaxErrorException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 

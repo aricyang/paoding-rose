@@ -156,8 +156,7 @@ public class JadeComponentProvider implements ResourceLoaderAware {
             boolean debugEnabled = logger.isDebugEnabled();
             Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
             if (debugEnabled) {
-                logger.debug("[jade/find] find " + resources.length + " resources for "
-                        + packageSearchPath);
+                logger.debug("[jade/find] find " + resources.length + " resources for " + packageSearchPath);
             }
             for (int i = 0; i < resources.length; i++) {
                 Resource resource = resources[i];
@@ -172,11 +171,9 @@ public class JadeComponentProvider implements ResourceLoaderAware {
                         logger.debug("Ignored because not exists:" + resource);
                     }
                 } else if (resource.isReadable()) {
-                    MetadataReader metadataReader = metadataReaderFactory
-                            .getMetadataReader(resource);
+                    MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
                     if (isCandidateComponent(metadataReader)) {
-                        ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(
-                                metadataReader);
+                        ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
                         sbd.setResource(resource);
                         sbd.setSource(resource);
                         if (sbd.getMetadata().isInterface() && sbd.getMetadata().isIndependent()) {
@@ -186,8 +183,7 @@ public class JadeComponentProvider implements ResourceLoaderAware {
                             candidates.add(sbd);
                         } else {
                             if (traceEnabled) {
-                                logger.trace("Ignored because not a interface top-level class: "
-                                        + resource);
+                                logger.trace("Ignored because not a interface top-level class: " + resource);
                             }
                         }
                     } else {
