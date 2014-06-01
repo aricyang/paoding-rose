@@ -15,15 +15,8 @@
  */
 package net.paoding.rose.jade.rowmapper;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import net.paoding.rose.jade.annotation.RowHandler;
 import net.paoding.rose.jade.statement.StatementMetaData;
-
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,6 +24,8 @@ import org.springframework.beans.BeanInstantiationException;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
+
+import java.util.*;
 
 /**
  * 支持DAO方法返回类型：
@@ -70,15 +65,12 @@ public class DefaultRowMapperFactory implements RowMapperFactory {
                     if (logger.isInfoEnabled()) {
                         logger.info("using rowMapper " + rowMapper + " for " + modifier);
                     }
-
                     return rowMapper;
                 } catch (Exception ex) {
-                    throw new BeanInstantiationException(rowHandler.rowMapper(), ex.getMessage(),
-                            ex);
+                    throw new BeanInstantiationException(rowHandler.rowMapper(), ex.getMessage(), ex);
                 }
             }
         }
-        //
 
         Class<?> returnClassType = modifier.getMethod().getReturnType();
         Class<?> rowType = getRowType(modifier);
@@ -90,7 +82,6 @@ public class DefaultRowMapperFactory implements RowMapperFactory {
 
         // 根据类型创建  RowMapper
         RowMapper rowMapper;
-
         // 返回单列的查询的(或者返回只有2列的Map类型查询的)
         if (TypeUtils.isColumnType(rowType)) {
             if (returnClassType == Map.class) {
@@ -98,9 +89,8 @@ public class DefaultRowMapperFactory implements RowMapperFactory {
             } else {
                 rowMapper = new SingleColumnRowMapper(rowType);
             }
-        }
         // 返回多列的，用Bean对象、集合、映射、数组来表示每一行的
-        else {
+        } else {
             if (rowType == Map.class) {
                 rowMapper = new ColumnMapRowMapper();
             } else if (rowType.isArray()) {

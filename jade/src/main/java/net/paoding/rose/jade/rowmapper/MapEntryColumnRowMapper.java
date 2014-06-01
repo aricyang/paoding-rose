@@ -15,13 +15,8 @@
  */
 package net.paoding.rose.jade.rowmapper;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-
 import net.paoding.rose.jade.annotation.KeyColumnOfMap;
 import net.paoding.rose.jade.statement.StatementMetaData;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,6 +24,10 @@ import org.springframework.dao.TypeMismatchDataAccessException;
 import org.springframework.jdbc.IncorrectResultSetColumnCountException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.JdbcUtils;
+
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
 /**
  * 在将SQL结果集某一行的两列，一列作为key，一列作为value，形成一个key-value映射对。
@@ -55,8 +54,7 @@ public class MapEntryColumnRowMapper implements RowMapper {
         this.modifier = modifier;
         Class<?>[] genericTypes = modifier.getGenericReturnTypes();
         if (genericTypes.length < 2) {
-            throw new IllegalArgumentException("please set map generic parameters in method: "
-                    + modifier.getMethod());
+            throw new IllegalArgumentException("please set map generic parameters in method: " + modifier.getMethod());
         }
 
         // 获取 Key 类型与列
