@@ -32,9 +32,9 @@ public interface Model {
      * 将对象(object,array,collection等)加入到MVC中的Model中作为一个属性，通过它传递给View
      * <p>
      * 将使用该对象的类名头字母小写的字符串作为名字；<br>
-     * 如果对象是数组，去数组元素的类的类名字头字母小写加上"List"作为名字<br>
-     * 如果对象是集合元素，取其第一个元素的类的类名字头字母小写加上"List"作为名字<br>
-     * 如果该值为空或者其集合长度为0的话，将被忽略<br>
+     *   如果对象是数组，取数组元素的类的类名字头字母小写加上"List"作为名字<br>
+     *   如果对象是集合元素，取其第一个元素的类的类名字头字母小写加上"List"作为名字<br>
+     *   如果该值为空或者其集合长度为0的话，将被忽略<br>
      * 
      * @param value 可以是普通对象，数组对象，集合对象；<br>
      *        可以为null，如果对象为null或集合长度为0直接被忽略掉
@@ -52,7 +52,7 @@ public interface Model {
     public Model add(String name, Object value);
 
     /**
-     * 将modelmap的key-value照搬到 {@link Model}中来，传递给View
+     * 将modelmap的key-value照搬到{@link Model}中来，传递给View
      * <p>
      * 不限制key一定是String类型的，但照搬过来的要通过toString()转化为String类型的key
      * 

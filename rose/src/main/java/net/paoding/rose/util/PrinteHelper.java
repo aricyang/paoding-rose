@@ -15,10 +15,6 @@
  */
 package net.paoding.rose.util;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-
 import net.paoding.rose.RoseFilter;
 import net.paoding.rose.web.InterceptorDelegate;
 import net.paoding.rose.web.ParamValidator;
@@ -30,6 +26,10 @@ import net.paoding.rose.web.impl.module.Module;
 import net.paoding.rose.web.impl.thread.ActionEngine;
 import net.paoding.rose.web.impl.thread.LinkedEngine;
 import net.paoding.rose.web.paramresolver.ParamResolver;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 
@@ -95,8 +95,8 @@ public class PrinteHelper {
         return sb.toString();
     }
 
-    private static void println(final MappingNode node, final String prefix, final int deep,
-            StringBuilder sb) {
+    private static void println(final MappingNode node, final String prefix,
+                                final int deep, StringBuilder sb) {
         final String gap = "    ";
         String tab = "";
         for (int i = 0; i < deep; i++) {

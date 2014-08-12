@@ -15,14 +15,6 @@
 */
 package net.paoding.rose.web.impl.module;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,6 +32,13 @@ import org.springframework.util.Assert;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * 
  * @author 王志亮 [qieqie.wang@gmail.com]
@@ -49,38 +48,41 @@ public class ModuleAppContext extends XmlWebApplicationContext {
 
     private static final Log logger = LogFactory.getLog(ModuleAppContext.class);
 
-    //
+    private List<Resource> contextResources = Collections.emptyList();
 
-    public static ModuleAppContext createModuleContext(WebApplicationContext parent, //
-            List<URL> contextResources, String[] messageBasenames, String uniqueId, String namespace)
-            throws IOException {
+    private String[] messageBaseNames = new String[0];
+
+    public ModuleAppContext() {
+    }
+
+    public static ModuleAppContext createModuleContext(WebApplicationContext parent,
+            List<URL> contextResources, String[] messageBasenames, String uniqueId, String namespace) throws IOException {
 
         long startTime = System.currentTimeMillis();
 
-        String loadingMsg = "[moduleContext.create] Loading Spring '" + namespace
-                + "' WebApplicationContext";
+        String loadingMsg = "[moduleContext.create] Loading Spring '" + namespace + "' WebApplicationContext";
         logger.info(loadingMsg);
         Assert.notNull(parent);
         ServletContext servletContext = parent.getServletContext();
         Assert.notNull(servletContext);
-        ModuleAppContext wac = new ModuleAppContext();
-        wac.setParent(parent);
-        wac.setServletContext(servletContext);
-        wac.setContextResources(toResources(contextResources));
-        wac.setId(uniqueId);
-        wac.setNamespace(namespace);
-        wac.setMessageBaseNames(messageBasenames);
-        wac.refresh();
+        ModuleAppContext m = new ModuleAppContext();
+        m.setParent(parent);
+        m.setServletContext(servletContext);
+        m.setContextResources(toResources(contextResources));
+        m.setId(uniqueId);
+        m.setNamespace(namespace);
+        m.setMessageBaseNames(messageBasenames);
+        m.refresh();
 
         // 日志打印
         if (logger.isDebugEnabled()) {
             long elapsedTime = System.currentTimeMillis() - startTime;
-            logger.debug("[moduleContext.create] Using context class [" + wac.getClass().getName()
+            logger.debug("[moduleContext.create] Using context class [" + m.getClass().getName()
                     + "] for " + namespace + " WebApplicationContext");
             logger.info("[moduleContext.create] " + namespace
                     + " WebApplicationContext: initialization completed in " + elapsedTime + " ms");
         }
-        return wac;
+        return m;
     }
 
     public static List<Resource> toResources(List<URL> contextResources) {
@@ -89,15 +91,6 @@ public class ModuleAppContext extends XmlWebApplicationContext {
             resources.add(new UrlResource(url));
         }
         return resources;
-    }
-
-    //
-
-    private List<Resource> contextResources = Collections.emptyList();
-
-    private String[] messageBaseNames = new String[0];
-
-    public ModuleAppContext() {
     }
 
     public void setContextResources(List<Resource> contextResources) {
@@ -122,8 +115,7 @@ public class ModuleAppContext extends XmlWebApplicationContext {
     }
 
     @Override
-    protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException,
-            IOException {
+    protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException, IOException {
         super.loadBeanDefinitions(reader);
         for (Resource resource : contextResources) {
             reader.loadBeanDefinitions(resource);

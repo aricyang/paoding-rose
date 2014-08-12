@@ -15,20 +15,19 @@
  */
 package net.paoding.rose.scanning.context.core;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import net.paoding.rose.scanning.LoadScope;
 import net.paoding.rose.scanning.ResourceRef;
 import net.paoding.rose.scanning.RoseScanner;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 
@@ -59,8 +58,7 @@ public class RoseResources {
         if (logger.isDebugEnabled()) {
             logger.debug("[applicationContext] call 'findFiles'");
         }
-        List<ResourceRef> resources = RoseScanner.getInstance().getJarOrClassesFolderResources(
-                scope);
+        List<ResourceRef> resources = RoseScanner.getInstance().getJarOrClassesFolderResources(scope);
         if (logger.isDebugEnabled()) {
             logger.debug("[applicationContext] exits from 'findFiles'");
             logger.debug("[applicationContext] it has " + resources.size()
@@ -77,8 +75,7 @@ public class RoseResources {
         for (ResourceRef ref : resources) {
             index++;
             if (ref.hasModifier("applicationContext")) {
-                Resource[] founds = ref.getInnerResources(resourcePatternResolver,
-                        "applicationContext*.xml");
+                Resource[] founds = ref.getInnerResources(resourcePatternResolver, "applicationContext*.xml");
                 List<Resource> asList = Arrays.asList(founds);
                 ctxResources.addAll(asList);
                 if (logger.isDebugEnabled()) {

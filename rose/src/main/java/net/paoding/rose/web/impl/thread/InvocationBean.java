@@ -15,19 +15,6 @@
  */
 package net.paoding.rose.web.impl.thread;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.InvocationUtils;
 import net.paoding.rose.web.RequestPath;
@@ -39,7 +26,6 @@ import net.paoding.rose.web.var.Flash;
 import net.paoding.rose.web.var.FlashImpl;
 import net.paoding.rose.web.var.Model;
 import net.paoding.rose.web.var.ModelImpl;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -47,6 +33,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.WebApplicationContext;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * @author 王志亮 [qieqie.wang@gmail.com]
@@ -90,7 +83,7 @@ public final class InvocationBean implements Invocation {
     private ModuleEngine moduleEngine;
 
     public InvocationBean(HttpServletRequest request, HttpServletResponse response,
-            RequestPath requestPath) {
+                          RequestPath requestPath) {
         setRequest(request);
         setResponse(response);
         setRequestPath(requestPath);

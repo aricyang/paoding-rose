@@ -15,23 +15,6 @@
  */
 package net.paoding.rose.scanner;
 
-import static net.paoding.rose.RoseConstants.CONF_INTERCEPTED_ALLOW;
-import static net.paoding.rose.RoseConstants.CONF_INTERCEPTED_DENY;
-import static net.paoding.rose.RoseConstants.CONF_MODULE_IGNORED;
-import static net.paoding.rose.RoseConstants.CONF_MODULE_PATH;
-import static net.paoding.rose.RoseConstants.CONF_PARENT_MODULE_PATH;
-import static net.paoding.rose.RoseConstants.CONTROLLERS;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 import net.paoding.rose.scanning.LoadScope;
 import net.paoding.rose.scanning.ResourceRef;
 import net.paoding.rose.scanning.RoseScanner;
@@ -39,13 +22,19 @@ import net.paoding.rose.scanning.vfs.FileName;
 import net.paoding.rose.scanning.vfs.FileObject;
 import net.paoding.rose.scanning.vfs.FileSystemManager;
 import net.paoding.rose.util.RoseStringUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.ResourceUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+
+import static net.paoding.rose.RoseConstants.*;
 
 /**
  * 
@@ -75,13 +64,12 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
                     + Arrays.toString(controllersScope));
         }
 
-        List<ResourceRef> refers = RoseScanner.getInstance().getJarOrClassesFolderResources(
-                controllersScope);
+        List<ResourceRef> refers = RoseScanner.getInstance()
+                .getJarOrClassesFolderResources(controllersScope);
 
         if (logger.isInfoEnabled()) {
             logger.info("[moduleResource] exits from 'findFiles'");
-            logger.info("[moduleResource] going to scan controllers"
-                    + " from these folders or jar files:" + refers);
+            logger.info("[moduleResource] going to scan controllers" + " from these folders or jar files:" + refers);
         }
 
         FileSystemManager fileSystem = new FileSystemManager();
@@ -137,8 +125,7 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
 
         afterScanning(local);
 
-        logger.info("[moduleResource] found " + local.moduleResourceList.size()
-                + " module resources ");
+        logger.info("[moduleResource] found " + local.moduleResourceList.size() + " module resources ");
 
         return local.moduleResourceList;
     }
@@ -167,7 +154,7 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
         ModuleResource parentModule = local.moduleResourceMap.get(candidate.getParent());
         // 如果rose.properties设置了controllers的module.path?
         FileObject rosePropertiesFile = candidate.getChild("rose.properties");
-        if (rosePropertiesFile != null && rosePropertiesFile.exists()) {
+        if (rosePropertiesFile!=null && rosePropertiesFile.exists()) {
             Properties p = new Properties();
             InputStream in = rosePropertiesFile.getContent().getInputStream();
             p.load(in);
@@ -183,15 +170,14 @@ public class ModuleResourceProviderImpl implements ModuleResourceProvider {
                 return;
             }
 
-            mappingPath = p.getProperty(CONF_MODULE_PATH);
+            mappingPath = p.getProperty(CONF_MODULE_PATH); // "module.path"
             if (mappingPath != null) {
                 mappingPath = mappingPath.trim();
-                String parentModulePlaceHolder = "${" + CONF_PARENT_MODULE_PATH + "}";
+                String parentModulePlaceHolder = "${" + CONF_PARENT_MODULE_PATH + "}"; // "parent.module.path"
                 if (mappingPath.indexOf(parentModulePlaceHolder) != -1) {
                     String parentModulePath = "";
                     if (candidate.getParent() != null) {
-                        parentModulePath = (parentModule == null) ? "" : parentModule
-                                .getMappingPath();
+                        parentModulePath = (parentModule == null) ? "" : parentModule.getMappingPath();
                     }
                     mappingPath = mappingPath.replace(parentModulePlaceHolder, parentModulePath);
                 }

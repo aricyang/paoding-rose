@@ -15,15 +15,15 @@
  */
 package net.paoding.rose.web.impl.mapping;
 
-import java.util.List;
-
 import net.paoding.rose.web.annotation.ReqMethod;
 import net.paoding.rose.web.impl.thread.Engine;
 import net.paoding.rose.web.impl.thread.LinkedEngine;
 
+import java.util.List;
+
 /**
- * {@link EngineGroup} 代表一个 {@link Engine} 集合，一个 {@link Mapping} 可能含一个
- * {@link EngineGroup}实例，也可能包含多个；
+ * {@link EngineGroup}代表一个{@link Engine}集合，
+ * 一个{@link Mapping}可能含一个多个{@link EngineGroup}实例；
  * <p>
  * 原类名WebResource，2010年5月改为EngineGroup
  * 
@@ -35,7 +35,8 @@ public interface EngineGroup {
     /**
      * 注册该资源对指定请求方法的处理逻辑，可以对某一个具体的请求方法注册多个处理逻辑。
      * <p>
-     * 一个请求方法有多个处理逻辑时，最终只有逻辑是真正执行的。不同的请求，根据其URI、参数等不同，真正执行的逻辑可能不一样。
+     * 一个请求方法有多个处理逻辑时，最终只有逻辑是真正执行的。
+     * 不同的请求，根据其URI、参数等不同，真正执行的逻辑可能不一样。
      * 
      * @param method 可以使用 {@link ReqMethod#ALL}
      * @param engine

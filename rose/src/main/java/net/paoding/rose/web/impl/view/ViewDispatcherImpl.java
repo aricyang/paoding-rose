@@ -15,20 +15,9 @@
  */
 package net.paoding.rose.web.impl.view;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-
 import net.paoding.rose.util.SpringUtils;
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.impl.view.velocity.RoseVelocityConfigurer;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,6 +36,16 @@ import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.velocity.VelocityConfig;
 import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
 import org.springframework.web.servlet.view.velocity.VelocityViewResolver;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * 
@@ -82,14 +81,12 @@ public class ViewDispatcherImpl implements ViewDispatcher, ApplicationContextAwa
     public View resolveViewName(Invocation inv, String viewPath, Locale locale) throws Exception {
         ViewResolver viewResolver = getSpringViewResolver(inv, viewPath);
         if (logger.isDebugEnabled()) {
-            logger.debug("found viewResolver '" + viewResolver + "' for viewPath '" + viewPath
-                    + "'");
+            logger.debug("found viewResolver '" + viewResolver + "' for viewPath '" + viewPath + "'");
         }
         return viewResolver.resolveViewName(viewPath, locale);
     }
 
-    protected ViewResolver getSpringViewResolver(Invocation inv, String viewPath)
-            throws IOException {
+    protected ViewResolver getSpringViewResolver(Invocation inv, String viewPath) throws IOException {
         if (viewPath.endsWith(".vm")) {
             if (logger.isDebugEnabled()) {
                 logger.debug("to get velocity view resolver.");
@@ -156,8 +153,7 @@ public class ViewDispatcherImpl implements ViewDispatcher, ApplicationContextAwa
         return this.jspViewResolver;
     }
 
-    protected ViewResolver getVelocityViewResolver(Invocation inv, String viewPath)
-            throws IOException {
+    protected ViewResolver getVelocityViewResolver(Invocation inv, String viewPath) throws IOException {
         //
         VelocityViewResolver viewResolver = velocityViewResolvers.get(viewPath);
         if (viewResolver != null) {

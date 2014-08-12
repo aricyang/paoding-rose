@@ -15,17 +15,15 @@
  */
 package net.paoding.rose.web.instruction;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
-
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.RequestPath;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.Assert;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 
@@ -108,7 +106,7 @@ public class RedirectInstruction extends AbstractInstruction {
             @Override
             public void render(Invocation inv) throws IOException, ServletException, Exception {
                 String actionPath = action;
-                if (action.length() > 0 && action.charAt(0) != '/') {
+                if (action.length()>0 && action.charAt(0)!='/') {
                     actionPath = "/" + action;
                 }
                 RequestPath requestPath = inv.getRequestPath();

@@ -15,35 +15,17 @@
  */
 package net.paoding.rose.web.impl.module;
 
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-
 import net.paoding.rose.RoseConstants;
 import net.paoding.rose.scanner.ModuleResource;
 import net.paoding.rose.util.RoseStringUtil;
 import net.paoding.rose.util.SpringUtils;
-import net.paoding.rose.web.ControllerErrorHandler;
-import net.paoding.rose.web.ControllerInterceptor;
-import net.paoding.rose.web.InterceptorDelegate;
-import net.paoding.rose.web.OncePerRequestInterceptorDelegate;
-import net.paoding.rose.web.ParamValidator;
+import net.paoding.rose.web.*;
 import net.paoding.rose.web.advancedinterceptor.Ordered;
 import net.paoding.rose.web.annotation.Ignored;
 import net.paoding.rose.web.annotation.Interceptor;
 import net.paoding.rose.web.annotation.NotForSubModules;
 import net.paoding.rose.web.annotation.Path;
 import net.paoding.rose.web.paramresolver.ParamResolver;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -59,6 +41,12 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
+import java.util.*;
+
 /**
  * 根据输入的module类信息，构造出具体的Module结构出来
  * 
@@ -69,7 +57,7 @@ public class ModulesBuilderImpl implements ModulesBuilder {
     private Log logger = LogFactory.getLog(getClass());
 
     public List<Module> build(List<ModuleResource> moduleResources,
-            WebApplicationContext rootContext) throws Exception {
+                              WebApplicationContext rootContext) throws Exception {
 
         // 重排序，使父级别的模块资源比子模块资源先处理
         moduleResources = new ArrayList<ModuleResource>(moduleResources);
@@ -81,23 +69,22 @@ public class ModulesBuilderImpl implements ModulesBuilder {
 
         // 
         for (ModuleResource moduleResource : moduleResources) {
-            final Module parentModule = (moduleResource.getParent() == null) ? null//
-                    : modulesAsMap.get(moduleResource.getParent());
-            final WebApplicationContext parentContext = (parentModule == null) ? rootContext//
-                    : parentModule.getApplicationContext();
+            final Module parentModule = (moduleResource.getParent()==null) ?
+                    null : modulesAsMap.get(moduleResource.getParent());
+            final WebApplicationContext parentContext = (parentModule==null) ?
+                    rootContext : parentModule.getApplicationContext();
             final String namespace = "context@controllers"
                     + moduleResource.getRelativePath().replace('/', '.');
 
             // 创建该module的spring context对象
-            final ServletContext servletContext = parentContext == null ? null //
-                    : parentContext.getServletContext();
+            final ServletContext servletContext = parentContext==null ?
+                    null : parentContext.getServletContext();
             final ModuleAppContext moduleContext = ModuleAppContext.createModuleContext(//
                     parentContext,//
                     moduleResource.getContextResources(),//
                     moduleResource.getMessageBasenames(),//
                     /*id*/moduleResource.getModuleUrl().toString(),//
-                    namespace//
-                    );
+                    namespace);
 
             // 扫描找到的类...定义到applicationContext
             registerBeanDefinitions(moduleContext, moduleResource.getModuleClasses());
@@ -119,14 +106,14 @@ public class ModulesBuilderImpl implements ModulesBuilder {
                 servletContext.setAttribute(contextAttrKey, moduleContext);
             }
 
-            // 从Spring应用环境中找出本web模块要使用的ParamValidator，ParamResolver, ControllerInterceptor, ControllerErrorHandler
+            // 从Spring应用环境中找出本web模块要使用的
+            // ParamValidator, ParamResolver, ControllerInterceptor, ControllerErrorHandler
             List<ParamResolver> customerResolvers = findContextResolvers(moduleContext);
 
             // resolvers
             module.setCustomerResolvers(customerResolvers);
             if (logger.isDebugEnabled()) {
-                logger.debug("module '" + module.getMappingPath() + "': apply resolvers "
-                        + customerResolvers);
+                logger.debug("module '" + module.getMappingPath() + "': apply resolvers " + customerResolvers);
             }
 
             // 将拦截器设置到module中
@@ -141,8 +128,7 @@ public class ModulesBuilderImpl implements ModulesBuilder {
 
                     // 先排除deny禁止的
                     if (moduleResource.getInterceptedDeny() != null) {
-                        if (RoseStringUtil.matches(moduleResource.getInterceptedDeny(), interceptor
-                                .getName())) {
+                        if (RoseStringUtil.matches(moduleResource.getInterceptedDeny(), interceptor.getName())) {
                             iter.remove();
                             if (logger.isDebugEnabled()) {
                                 logger.debug("module '" + module.getMappingPath()
@@ -154,8 +140,7 @@ public class ModulesBuilderImpl implements ModulesBuilder {
                     }
                     //  确认最大的allow允许
                     if (moduleResource.getInterceptedAllow() != null) {
-                        if (!RoseStringUtil.matches(moduleResource.getInterceptedAllow(),
-                                interceptor.getName())) {
+                        if (!RoseStringUtil.matches(moduleResource.getInterceptedAllow(), interceptor.getName())) {
                             iter.remove();
                             if (logger.isDebugEnabled()) {
                                 logger.debug("module '" + module.getMappingPath()
@@ -177,8 +162,7 @@ public class ModulesBuilderImpl implements ModulesBuilder {
             List<ParamValidator> validators = findContextValidators(moduleContext);
             module.setValidators(validators);
             if (logger.isDebugEnabled()) {
-                logger.debug("module '" + module.getMappingPath() + "': apply global validators "
-                        + validators);
+                logger.debug("module '" + module.getMappingPath() + "': apply global validators " + validators);
             }
 
             // errorhandler
@@ -191,8 +175,7 @@ public class ModulesBuilderImpl implements ModulesBuilder {
                     module.setErrorHandler(dispatcher);
                 }
                 if (logger.isInfoEnabled()) {
-                    logger.info("set errorHandler: " + module.getMappingPath() + "  "
-                            + errorHandler);
+                    logger.info("set errorHandler: " + module.getMappingPath() + "  " + errorHandler);
                 }
             }
 
@@ -233,17 +216,26 @@ public class ModulesBuilderImpl implements ModulesBuilder {
         }
     }
 
-    private boolean checkController(final XmlWebApplicationContext context, String beanName,
-            ModuleImpl module) throws IllegalAccessException {
-        AbstractBeanDefinition beanDefinition = (AbstractBeanDefinition) context.getBeanFactory()
-                .getBeanDefinition(beanName);
+    /**
+     *  1. 解析@Path注释
+     * @param context
+     * @param beanName
+     * @param module
+     * @return
+     * @throws IllegalAccessException
+     */
+    private boolean checkController(final XmlWebApplicationContext context,
+                                    String beanName, ModuleImpl module) throws IllegalAccessException {
+        AbstractBeanDefinition beanDefinition = (AbstractBeanDefinition)
+                context.getBeanFactory().getBeanDefinition(beanName);
         String beanClassName = beanDefinition.getBeanClassName();
         String controllerSuffix = null;
+        // CONTROLLER_SUFFIXES = "Resource", "Controller", "C", "Action"
         for (String suffix : RoseConstants.CONTROLLER_SUFFIXES) {
-            if (beanClassName.length() > suffix.length() && beanClassName.endsWith(suffix)) {
-                if (suffix.length() == 1
-                        && Character.isUpperCase(beanClassName.charAt(beanClassName.length()
-                                - suffix.length() - 1))) {
+            if (beanClassName.length()>suffix.length() && beanClassName.endsWith(suffix)) {
+                if (suffix.length()==1 && Character.isUpperCase(
+                        beanClassName.charAt(
+                                beanClassName.length()-suffix.length()-1))) {
                     continue;
                 }
                 controllerSuffix = suffix;
@@ -271,15 +263,16 @@ public class ModulesBuilderImpl implements ModulesBuilder {
         String[] controllerPaths = null;
         if (!beanDefinition.hasBeanClass()) {
             try {
+                // set beanDefinition.beanClass inner
                 beanDefinition.resolveBeanClass(Thread.currentThread().getContextClassLoader());
             } catch (ClassNotFoundException e) {
-                throw new CannotLoadBeanClassException("", beanName, beanDefinition
-                        .getBeanClassName(), e);
+                throw new CannotLoadBeanClassException("", beanName, beanDefinition.getBeanClassName(), e);
             }
         }
         final Class<?> clazz = beanDefinition.getBeanClass();
-        final String controllerName = StringUtils.removeEnd(ClassUtils
-                .getShortNameAsProperty(clazz), controllerSuffix);
+        final String controllerName = StringUtils.removeEnd(
+                ClassUtils.getShortNameAsProperty(clazz), controllerSuffix);
+
         Path reqMappingAnnotation = clazz.getAnnotation(Path.class);
         if (reqMappingAnnotation != null) {
             controllerPaths = reqMappingAnnotation.value();
@@ -300,8 +293,8 @@ public class ModulesBuilderImpl implements ModulesBuilder {
                                 + "' for controller " + beanClassName
                                 + ": don't end with more than one '/'");
                     }
-                    controllerPaths[i] = controllerPaths[i].substring(0, controllerPaths[i]
-                            .length() - 1);
+                    controllerPaths[i] = controllerPaths[i].substring(0,
+                            controllerPaths[i].length()-1);
                 }
             }
         } else {
@@ -317,8 +310,7 @@ public class ModulesBuilderImpl implements ModulesBuilder {
         // 这个Controller是否已经在Context中配置了?
         // 如果使用Context配置，就不需要在这里实例化
         Object controller = context.getBean(beanName);
-        module.addController(//
-                controllerPaths, clazz, controllerName, controller);
+        module.addController(controllerPaths, clazz, controllerName, controller);
         if (Proxy.isProxyClass(controller.getClass())) {
             if (logger.isDebugEnabled()) {
                 logger.debug("module '" + module.getMappingPath() + "': add controller "
@@ -355,12 +347,11 @@ public class ModulesBuilderImpl implements ModulesBuilder {
             String clazzName = clazz.getName();
             if (ArrayUtils.contains(definedClasses, clazzName)) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Ignores bean definition because it has been exist in context: "
-                            + clazz.getName());
+                    logger.debug("Ignores bean definition because it has been exist in context: " + clazz.getName());
                 }
                 continue;
             }
-            //
+
             String beanName = null;
             if (StringUtils.isEmpty(beanName) && clazz.isAnnotationPresent(Component.class)) {
                 beanName = clazz.getAnnotation(Component.class).value();
@@ -428,8 +419,8 @@ public class ModulesBuilderImpl implements ModulesBuilder {
     }
 
     private List<ParamResolver> findContextResolvers(XmlWebApplicationContext context) {
-        String[] resolverNames = SpringUtils.getBeanNames(context.getBeanFactory(),
-                ParamResolver.class);
+        String[] resolverNames = SpringUtils.getBeanNames(
+                context.getBeanFactory(), ParamResolver.class);
         ArrayList<ParamResolver> resolvers = new ArrayList<ParamResolver>(resolverNames.length);
         for (String beanName : resolverNames) {
             ParamResolver resolver = (ParamResolver) context.getBean(beanName);
@@ -456,12 +447,11 @@ public class ModulesBuilderImpl implements ModulesBuilder {
     }
 
     private List<InterceptorDelegate> findInterceptors(XmlWebApplicationContext context) {
-        String[] interceptorNames = SpringUtils.getBeanNames(context.getBeanFactory(),
-                ControllerInterceptor.class);
-        ArrayList<InterceptorDelegate> interceptors = new ArrayList<InterceptorDelegate>(
-                interceptorNames.length);
+        String[] interceptorNames = SpringUtils.getBeanNames(
+                context.getBeanFactory(), ControllerInterceptor.class);
+        ArrayList<InterceptorDelegate> interceptors = new ArrayList<InterceptorDelegate>(interceptorNames.length);
         for (String beanName : interceptorNames) {
-            ControllerInterceptor interceptor = (ControllerInterceptor) context.getBean(beanName);
+            ControllerInterceptor interceptor = (ControllerInterceptor)context.getBean(beanName);
             Class<?> userClass = ClassUtils.getUserClass(interceptor);
             if (userClass.isAnnotationPresent(Ignored.class)) {
                 if (logger.isDebugEnabled()) {
@@ -495,7 +485,7 @@ public class ModulesBuilderImpl implements ModulesBuilder {
             }
             final String rose = "rose";
             if (interceporName.startsWith(rose)
-                    && (interceporName.length() == rose.length() || Character
+                    && (interceporName.length()==rose.length() || Character
                             .isUpperCase(interceporName.charAt(rose.length())))
                     && !userClass.getName().startsWith("net.paoding.rose.")) {
                 throw new IllegalArgumentException("illegal interceptor name '" + interceporName

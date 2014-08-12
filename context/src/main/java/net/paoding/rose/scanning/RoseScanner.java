@@ -107,8 +107,8 @@ public class RoseScanner {
             resources = new LinkedList<ResourceRef>();
             for (String scopeEntry : scope) {
                 String packagePath = scopeEntry.replace('.', '/');
-                Resource[] packageResources = resourcePatternResolver.getResources("classpath*:"
-                        + packagePath);
+                Resource[] packageResources = resourcePatternResolver
+                        .getResources("classpath*:" + packagePath);
                 for (Resource pkgResource : packageResources) {
                     String uri = pkgResource.getURI().toString();
                     uri = StringUtils.removeEnd(uri, "/");
@@ -130,8 +130,7 @@ public class RoseScanner {
                     if (!resources.contains(ref)) {
                         resources.add(ref);
                         if (logger.isDebugEnabled()) {
-                            logger.debug("[findFiles] found classes folders "
-                                    + "or rosed jar files by scope:" + ref);
+                            logger.debug("[findFiles] found classes folders " + "or rosed jar files by scope:" + ref);
                         }
                     }
                 }
@@ -172,13 +171,7 @@ public class RoseScanner {
                 }
                 String path = urlObject.getPath();
                 Assert.isTrue(path.endsWith("/"));
-//                if (!path.endsWith("/classes/") && !path.endsWith("/bin/")) {
-//                    if (logger.isInfoEnabled()) {
-//                        logger.info("[classesFolder] Ignored classes folder because "
-//                                + "not ends with '/classes/' or '/bin/': " + urlObject);
-//                    }
-//                    continue;
-//                }
+
                 File file;
                 try {
                     file = new File(urlObject.toURI());
@@ -187,8 +180,7 @@ public class RoseScanner {
                 }
                 if (file.isFile()) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("[classesFolder] Ignored because not a directory: "
-                                + urlObject);
+                        logger.debug("[classesFolder] Ignored because not a directory: " + urlObject);
                     }
                     continue;
                 }
@@ -197,8 +189,7 @@ public class RoseScanner {
                 if (classesFolderResources.contains(resourceRef)) {
                     // 删除重复的地址
                     if (logger.isDebugEnabled()) {
-                        logger.debug("[classesFolder] remove replicated classes folder: "
-                                + resourceRef);
+                        logger.debug("[classesFolder] remove replicated classes folder: " + resourceRef);
                     }
                 } else {
                     classesFolderResources.add(resourceRef);
@@ -219,14 +210,12 @@ public class RoseScanner {
                     if (refURI.startsWith(refjURI)) {
                         toRemove.add(refj);
                         if (logger.isInfoEnabled()) {
-                            logger.info("[classesFolder] remove wrapper classes folder: " //
-                                    + refj);
+                            logger.info("[classesFolder] remove wrapper classes folder: " + refj);
                         }
                     } else if (refjURI.startsWith(refURI) && refURI.length() != refjURI.length()) {
                         toRemove.add(ref);
                         if (logger.isInfoEnabled()) {
-                            logger.info("[classesFolder] remove wrapper classes folder: " //
-                                    + ref);
+                            logger.info("[classesFolder] remove wrapper classes folder: " + ref);
                         }
                     }
                 }

@@ -15,30 +15,19 @@
  */
 package net.paoding.rose.web.impl.module;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import net.paoding.rose.web.annotation.AsSuperController;
 import net.paoding.rose.web.annotation.Ignored;
 import net.paoding.rose.web.annotation.ReqMethod;
-import net.paoding.rose.web.annotation.rest.Delete;
-import net.paoding.rose.web.annotation.rest.Get;
-import net.paoding.rose.web.annotation.rest.Head;
-import net.paoding.rose.web.annotation.rest.Options;
-import net.paoding.rose.web.annotation.rest.Post;
-import net.paoding.rose.web.annotation.rest.Put;
-import net.paoding.rose.web.annotation.rest.Trace;
-
+import net.paoding.rose.web.annotation.rest.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.ClassUtils;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * 
@@ -110,8 +99,7 @@ public class ControllerRef {
                         }
                         shotcutMappings = new HashMap<ReqMethod, String[]>();
                         shotcutMappings.put(ReqMethod.GET, new String[] { "/" + method.getName() });
-                        shotcutMappings
-                                .put(ReqMethod.POST, new String[] { "/" + method.getName() });
+                        shotcutMappings.put(ReqMethod.POST, new String[] { "/" + method.getName() });
                     }
                 }
                 if (shotcutMappings.size() > 0) {

@@ -61,7 +61,11 @@ public class ConstantMapping implements Mapping {
         if (o instanceof ConstantMapping) {
             String opath = ((ConstantMapping) o).definition;
             if (opath.length() == definition.length()) {
-                return this.definition.compareTo(opath); // 字母顺序
+                // 比较字母顺序:
+                // = 0 : if opath's lexicographically equal to this.definition;
+                // < 0 : if opath's lexicographically greater than this.definition;
+                // > 0 : if opath's lexicographically less than this.definition.
+                return this.definition.compareTo(opath);
             }
             if (this.definition.length() == 0) {
                 return 1;

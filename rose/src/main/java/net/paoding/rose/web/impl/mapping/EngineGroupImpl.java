@@ -68,12 +68,17 @@ public class EngineGroupImpl implements EngineGroup {
     }
 
     /**
-     * 添加一个 {@link Engine} ；如果所给的 method 是 {@link ReqMethod#ALL}，则优先级最低。
+     * 添加一个 {@link Engine} ；
+     * 如果所给的 method 是 {@link ReqMethod#ALL}，则优先级最低。
      * 
      * @param method
      * @param engine
      */
     public void addEngine(ReqMethod method, LinkedEngine engine) {
+        // 如果method==All，method.parse()将返回[GET, POST, DELETE, PUT, HEAD, OPTIONS, TRACE]
+        // 否则只返回[method]
+        // 所以当method=All时，engines[][]将充满：
+        // engines[GET][] engines[POST][] engines[DELETE][] ......
         for (ReqMethod md : method.parse()) {
             LinkedEngine[] methodEngines = engines[md.ordinal()];
             if (methodEngines.length == 0) {

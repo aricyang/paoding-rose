@@ -15,15 +15,6 @@
 */
 package net.paoding.rose.web.impl.thread;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import net.paoding.rose.web.Dispatcher;
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.InvocationUtils;
@@ -33,10 +24,13 @@ import net.paoding.rose.web.impl.mapping.EngineGroup;
 import net.paoding.rose.web.impl.mapping.MappingNode;
 import net.paoding.rose.web.impl.mapping.MatchResult;
 import net.paoding.rose.web.impl.module.Module;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.Assert;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * 
@@ -70,7 +64,7 @@ public class Rose implements EngineChain {
     private final LinkedList<AfterCompletion> afterCompletions = new LinkedList<AfterCompletion>();
 
     public Rose(List<Module> modules, MappingNode mappingTree, HttpServletRequest httpRequest,
-            HttpServletResponse httpResponse, RequestPath requestPath) {
+                HttpServletResponse httpResponse, RequestPath requestPath) {
         this.mappingTree = mappingTree;
         this.modules = modules;
         this.originalHttpRequest = httpRequest;
@@ -137,11 +131,9 @@ public class Rose implements EngineChain {
         if (leafEngineGroup.size() == 0) {
             // not rose uri
             if (debugEnabled) {
-                logger.debug("not rose uri, not exits leaf engines for it: '" + this.path.getUri()
-                        + "'");
+                logger.debug("not rose uri, not exits leaf engines for it: '" + this.path.getUri() + "'");
             }
             return false;
-
         }
         final LinkedEngine leafEngine = select(leafEngineGroup.getEngines(path.getMethod()));
         if (leafEngine == null) {
@@ -247,6 +239,7 @@ public class Rose implements EngineChain {
         inv.setPreInvocation(preInvocation);
         //
         InvocationUtils.bindRequestToCurrentThread(httpRequest);
+        // request.setAttribute("$$paoding-rose.invocation", inv);
         InvocationUtils.bindInvocationToRequest(inv, httpRequest);
 
         // invoke the engine chain
@@ -273,7 +266,8 @@ public class Rose implements EngineChain {
             } else {
                 InvocationUtils.unindRequestFromCurrentThread();
             }
-            // 更新绑定的invocation，只对于那些forward后request.setAttibute影响了前者的有效。(include的不用处理了，已经做了snapshot了)
+            // 更新绑定的invocation，只对于那些forward后request.setAttibute影响了前者的有效。
+            // (include的不用处理了，已经做了snapshot了)
             if (preInvocation != null) {
                 InvocationUtils.bindInvocationToRequest(preInvocation, httpRequest);
             }
@@ -297,7 +291,6 @@ public class Rose implements EngineChain {
             }
         }
         if (logger.isDebugEnabled()) {
-
             if (selectedEngine == null) {
                 logger.debug("No engine selected.");
             } else {

@@ -16,8 +16,8 @@
 package net.paoding.rose.web;
 
 /**
- * 如果控制器action方法的参数对象实现了 {@link AfterAction}接口，Rose将在所在action方法返回之后，调用
- * {@link #doAfterAction(Invocation, Object)}方法
+ * 如果控制器action方法的参数对象实现了 {@link AfterAction}接口，Rose将在所在action方法返回之后，
+ * 调用{@link #doAfterAction(Invocation, Object)}方法
  * 
  * @author 王志亮 [qieqie.wang@gmail.com]
  * 

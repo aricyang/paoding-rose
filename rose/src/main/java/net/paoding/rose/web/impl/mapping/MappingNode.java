@@ -15,12 +15,11 @@
  */
 package net.paoding.rose.web.impl.mapping;
 
-import java.util.ArrayList;
-
 import net.paoding.rose.web.RequestPath;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.util.ArrayList;
 
 /**
  * {@link MappingNode}代表匹配树的一个结点，树的结点能够包含一个或多个被称为资源的 {@link EngineGroup} 对象
@@ -92,6 +91,8 @@ public class MappingNode implements Comparable<MappingNode> {
                 }
                 int c = child.getMapping().compareTo(position.getMapping());
                 if (c < 0) {
+                    // 如果child权值小，则将当前leftMostChild节点替换为child，
+                    // child的sibling替换为leftMostChild
                     child.sibling = position;
                     if (prev == null) {
                         this.leftMostChild = child;
@@ -149,7 +150,7 @@ public class MappingNode implements Comparable<MappingNode> {
             // 一旦result非空，这个请求只能在这个结点中处理了，不可能再由其它结点处理，
             // 即，如果因为某些原因本结点无法处理此请求，可以直接得出结论：这个请求不能被处理了
             last = curNode.getMapping().match(remaining);
-            if (last != null && /*只对常量匹配的作判断*/last.getParameterName() == null) {
+            if (last!=null && /*只对常量匹配的作判断*/last.getParameterName()==null) {
                 // mapping是 /abc/efg，requestUri是 /abc123的不应该进入/abc分支，reset last为null
                 if (curNode.ammountOfRegexChildren < 0) {
                     // 这个if块里面的代码不用考虑同步，因此在并发下可能有若干、少数次的重复计算，不过对结果、性能没影响
@@ -177,8 +178,7 @@ public class MappingNode implements Comparable<MappingNode> {
             }
 
             if (debugEnabled) {
-                logger.debug("['" + requestPath.getRosePath() + "'] matched(" //
-                        + (matchResults.size() + 1) + "): '" + last + "'");
+                logger.debug("['" + requestPath.getRosePath() + "'] matched(" + (matchResults.size()+1) + "): '" +last+ "'");
             }
 
             // add to results for return

@@ -15,11 +15,11 @@
  */
 package net.paoding.rose.scanning;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * 
@@ -37,11 +37,11 @@ public class LoadScope {
      * 通过一个一个开发者设置的字符串，创建一个LoadScope对象。
      * 如果在loadScope中没有指定componetType的，使用defType作为他的componetType.
      * <p>
-     * loadScopeString: componetConf [; componetConf]*<br>
-     * componetConf: [componetType = ] componetConfValue<br>
-     * componetType: 'controllers' | 'applicationContext' | 'messages' |
-     * '*' <br>
-     * componetConfValue: package [, packages]*<br>
+     *   loadScopeString: componetConf [; componetConf]*<br>
+     *   componetConf: [componetType = ] componetConfValue<br>
+     *   componetType: 'controllers' | 'applicationContext' | 'messages' |
+     *   '*' <br>
+     *   componetConfValue: package [, packages]*<br>
      * 
      * @param loadScopeString
      * @param defType
@@ -71,7 +71,8 @@ public class LoadScope {
             // 代表"controllers=com.renren.xoa, com.renren.yourapp"串
             componetConf = componetConf.trim();
             int componetTypeIndex;
-            String componetType = defType; // 代表"controllers", "applicationContext", "dao", "messages", "*"等串
+            // componetType: 代表"controllers", "applicationContext", "dao", "messages", "*"等串
+            String componetType = defType;
             String componetConfValue = componetConf;
             if ((componetTypeIndex = componetConf.indexOf('=')) != -1) {
                 componetType = componetConf.substring(0, componetTypeIndex).trim();

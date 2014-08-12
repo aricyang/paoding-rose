@@ -15,21 +15,19 @@
  */
 package net.paoding.rose.web.instruction;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.servlet.ServletException;
-
 import net.paoding.rose.util.SpringUtils;
 import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.impl.thread.InvocationBean;
-
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
+
+import javax.servlet.ServletException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author 王志亮 [qieqie.wang@gmail.com]
@@ -39,10 +37,9 @@ public class InstructionExecutorImpl implements InstructionExecutor {
     private Log logger = LogFactory.getLog(getClass());
 
     @Override
-    public Object render(Invocation inv, Object instruction) throws IOException, ServletException,
-            Exception {
+    public Object render(Invocation inv, Object instruction) throws IOException, ServletException, Exception {
         instruction = translatesToInstructionObject((InvocationBean) inv, instruction);
-        if (instruction != null && !Thread.currentThread().isInterrupted()) {
+        if (instruction!=null && !Thread.currentThread().isInterrupted()) {
             ((Instruction) instruction).render(inv);
         }
         return instruction;
@@ -54,8 +51,7 @@ public class InstructionExecutorImpl implements InstructionExecutor {
      * @return
      * @throws StackOverflowError
      */
-    private Instruction translatesToInstructionObject(InvocationBean inv, Object instruction)
-            throws StackOverflowError {
+    private Instruction translatesToInstructionObject(InvocationBean inv, Object instruction) throws StackOverflowError {
         int count = 0;
         while (!(instruction instanceof Instruction)) {
             if (count++ > 50) {
@@ -83,6 +79,7 @@ public class InstructionExecutorImpl implements InstructionExecutor {
         if (logger.isDebugEnabled()) {
             logger.debug("parset instruction:" + ins.getClass().getName() + ": '" + ins + "'");
         }
+
         if (ClassUtils.isPrimitiveOrWrapper(ins.getClass())) {
             return Text.text(ins);
         } else if (ins instanceof CharSequence) {
@@ -97,8 +94,8 @@ public class InstructionExecutorImpl implements InstructionExecutor {
                 return new ViewInstruction(str);
             }
             if (str.startsWith("r:") || str.startsWith("redirect:")) {
-                StringInstruction si = new StringInstruction(false, str
-                        .substring(str.indexOf(':') + 1));
+                StringInstruction si = new StringInstruction(
+                        false, str.substring(str.indexOf(':') + 1));
                 if (si.innerInstruction.startsWith("http://")
                         || si.innerInstruction.startsWith("https://")) {
                     return Redirect.location(si.innerInstruction);
@@ -158,7 +155,7 @@ public class InstructionExecutorImpl implements InstructionExecutor {
             StringInstruction fr = (StringInstruction) ins;
             String str = fr.innerInstruction;
             int queryIndex = str.indexOf('?');
-            for (int i = (queryIndex == -1) ? str.length() - 1 : queryIndex - 1; i >= 0; i--) {
+            for (int i=(queryIndex==-1) ? str.length()-1 : queryIndex-1; i>=0; i--) {
                 if (str.charAt(i) != ':') {
                     continue;
                 }

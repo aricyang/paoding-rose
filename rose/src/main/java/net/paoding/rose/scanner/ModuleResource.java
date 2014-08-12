@@ -20,10 +20,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 封装一个web模块资源的相关信息。rose 将每一个 controllers 包以及子包 <strong>各称为</strong>
- * 一个web模块资源。 xxx.controllers 是一个模块资源 ， xxx.controllers.subpkg
- * 是另外一个模块资源。极端情况下，不同jar文件可能具有相同的 xxx.controllers
- * 包，rose会将他们进行区分，称为2个URL地址不同的web模块资源。
+ * 封装一个web模块资源的相关信息。
+ * rose将每一个controllers包以及子包<strong>各称为</strong>一个web模块资源。
+ *   xxx.controllers 是一个模块资源 ， xxx.controllers.subpkg是另外一个模块资源。
+ * 极端情况下，不同jar文件可能具有相同的 xxx.controllers包，rose会将他们进行区分，
+ * 称为2个URL地址不同的web模块资源。
  * <p>
  * rose使用web模块资源用来构造web模块。
  * 
@@ -32,17 +33,21 @@ import java.util.List;
  */
 public class ModuleResource implements Comparable<ModuleResource> {
 
-    // 该模块资源的url地址，比如jar:file:/path/to/your/jarfile.jar!/xxx/controllers/subpkg/
+    // 该模块资源的url地址，
+    // 比如jar:file:/path/to/your/jarfile.jar!/xxx/controllers/subpkg/
     private URL moduleUrl;
 
     // 该模块相对于xxx.controllers模块的地址
-    // 如果该模块就是xxx.controllers本身，modulePath=""
-    // 如果该模块是xxx.controllers.subpkg，modulePath=/subpkg
-    // 和FileObject之间的相对地址有所区别：FileObject之间的相对地址是不以'/'开始的.
+    //   如果该模块就是xxx.controllers本身，modulePath=""
+    //   如果该模块是xxx.controllers.subpkg，modulePath=/subpkg
+    //
+    // 和FileObject之间的相对地址有所区别：
+    //   FileObject之间的相对地址是不以'/'开始的.
     private String relativePath;
 
     // 该模块使用的web请求地址映射，默认通过相对于上级的xxx.controllers地址modulePath确定。
-    // 开发者可通过在所在模块下放置一个rose.properties文件，jar:file:/path/to/your/jarfile.jar!/xxx/controllers/subpkg/rose.properties，
+    // 开发者可通过在所在模块下放置一个rose.properties文件:
+    //     jar:file:/path/to/your/jarfile.jar!/xxx/controllers/subpkg/rose.properties，
     // 配置属性module.path=/custormed定制地址映射，特别是做正则表达式配置'module.path=/${userId:[0-9]+}'
     private String mappingPath;
 

@@ -15,16 +15,6 @@
  */
 package net.paoding.rose.web.instruction;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import net.paoding.rose.RoseConstants;
 import net.paoding.rose.util.SpringUtils;
 import net.paoding.rose.web.Invocation;
@@ -32,7 +22,6 @@ import net.paoding.rose.web.impl.thread.InvocationBean;
 import net.paoding.rose.web.impl.view.ViewDispatcher;
 import net.paoding.rose.web.impl.view.ViewDispatcherImpl;
 import net.paoding.rose.web.impl.view.ViewPathCache;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +31,15 @@ import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * {@link ViewInstruction} 实现 {@link Instruction}接口，调用 {@link ViewResolver}
@@ -82,6 +80,7 @@ public class ViewInstruction extends AbstractInstruction {
 
             if (!Thread.interrupted()) {
                 inv.addModel(ROSE_INVOCATION, inv);
+                // 最终由Sring view进行页面渲染
                 view.render(inv.getModel().getAttributes(), request, response);
             } else {
                 logger.info("interrupted");
@@ -92,9 +91,10 @@ public class ViewInstruction extends AbstractInstruction {
     /**
      * 
      * @param inv
-     * @param viewName 大多数情况viewName应该是一个普通字符串 (e.g:
-     *        index)，也可能是index.jsp带后缀的字符串，
-     *        可能是一个带有/开头的绝对路径地址，可能是类似template/default这样的地址
+     * @param viewName 大多数情况viewName应该是一个普通字符串 (e.g:index)，
+     *                 也可能是index.jsp带后缀的字符串，
+     *                 可能是一个带有/开头的绝对路径地址，
+     *                 可能是类似template/default这样的地址
      * @return
      * @throws IOException
      */
@@ -120,8 +120,7 @@ public class ViewInstruction extends AbstractInstruction {
             String directoryPath = RoseConstants.VIEWS_PATH + viewRelativePath;
             File directoryFile = new File(inv.getServletContext().getRealPath(directoryPath));
             if (!directoryFile.exists()) {
-                String msg = "404: view directory not found, you need to create it in your webapp:"
-                        + directoryPath;
+                String msg = "404: view directory not found, you need to create it in your webapp:" + directoryPath;
                 logger.error(msg);
                 inv.getResponse().sendError(404, msg);
                 return null;
@@ -135,8 +134,8 @@ public class ViewInstruction extends AbstractInstruction {
         if (queryStringIndex < 0) {
             viewPath = getViewPathFromCache(inv, viewPathCache, viewName);
         } else {
-            viewPath = getViewPathFromCache(inv, viewPathCache, viewName.substring(0,
-                    queryStringIndex))
+            viewPath = getViewPathFromCache(inv, viewPathCache,
+                    viewName.substring(0, queryStringIndex))
                     + viewName.substring(queryStringIndex);
         }
 

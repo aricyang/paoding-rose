@@ -27,15 +27,18 @@ import net.paoding.rose.web.paramresolver.ParamResolver;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * {@link Module}代表了在同一个web程序中的一个模块。不同的模块包含一些特定的控制器对象、控制器拦截器、控制器异常处理器。
+ * {@link Module}代表了在同一个web程序中的一个模块。
+ * 不同的模块包含一些特定的控制器对象、控制器拦截器、控制器异常处理器。
  * 不同的模块共享了ServletContext以及整个程序的中间层、资源层。
  * <p>
- * 一个web程序的不同的模块有不同的名字和路径。作为{@link Module}接口本身并没有要求模块的名字和路径有什么关系，
- * 但在实现上模块的路径是由其名字决定的，即path=/name，比如名字为admin的模块，路径将是/admin。
- * 作为一个特例，名字为root的模块路径则只是空串。
+ *   一个web程序的不同的模块有不同的名字和路径。
+ *   作为{@link Module}接口本身并没有要求模块的名字和路径有什么关系，
+ *   但在实现上模块的路径是由其名字决定的，即path=/name，比如名字为admin的模块，路径将是/admin。
+ *   作为一个特例，名字为root的模块路径则只是空串。
  * <p>
- * 一个HTTP请求将根据它的URI，映射到相应的web程序中(由web容器处理)，而后又映射给具体的module模块(由Rose处理)。
- * 映射规则以模块的路径为依据(名字此时不参与这个决策)。
+ *   一个HTTP请求将根据它的URI，映射到相应的web程序中(由web容器处理)，
+ *   而后又映射给具体的module模块(由Rose处理)。
+ *   映射规则以模块的路径为依据(名字此时不参与这个决策)。
  * <p>
  * 
  * @author 王志亮 [qieqie.wang@gmail.com]

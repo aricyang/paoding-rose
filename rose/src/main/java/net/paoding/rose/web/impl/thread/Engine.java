@@ -23,10 +23,12 @@ import javax.servlet.http.HttpServletRequest;
 import net.paoding.rose.web.impl.mapping.Mapping;
 
 /**
- * 一个 {@link Engine} 封装了对某种符合要求的请求的某种处理。Rose 对一次WEB请求的处理最终落实为对一些列的
- * {@link Engine}的有序调用，每个 {@link Engine} 负责处理其中需要处理的逻辑，共同协作完成 Rose 的职责。
+ * 一个 {@link Engine} 封装了对某种符合要求的请求的某种处理。
+ *   Rose对一次WEB请求的处理最终落实为对一些列的{@link Engine}的有序调用，
+ *   每个{@link Engine}负责处理其中需要处理的逻辑，共同协作完成Rose的职责。
  * <p>
- * 在一个Rose应用中，存在着“很多的、不同的” {@link Engine}实例，这些实例根据映射关系组成在一个树状的结构中。
+ * 在一个Rose应用中，存在着“很多的、不同的” {@link Engine}实例，
+ * 这些实例根据映射关系组成在一个树状的结构中。
  * 
  * @see Rose
  * @see Mapping

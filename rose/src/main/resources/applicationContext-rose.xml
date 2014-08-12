@@ -15,13 +15,10 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
 	<bean id="parentErrorHandler" class="net.paoding.rose.web.impl.module.ParentErrorHandlerImpl" />
 
-	<bean id="beforeActionInterceptor"
-		class="net.paoding.rose.web.impl.thread.BeforeActionInterceptor" />
+	<bean id="beforeActionInterceptor" class="net.paoding.rose.web.impl.thread.BeforeActionInterceptor" />
 	<bean id="afterActionInterceptor" class="net.paoding.rose.web.impl.thread.AfterActionInterceptor" />
 
-	<bean id="beforeInterceptorsInterceptor"
-		class="net.paoding.rose.web.impl.thread.BeforeInterceptorsInterceptor" />
-	<bean id="afterInterceptorsInterceptor"
-		class="net.paoding.rose.web.impl.thread.AfterInterceptorsInterceptor" />
+	<bean id="beforeInterceptorsInterceptor" class="net.paoding.rose.web.impl.thread.BeforeInterceptorsInterceptor" />
+	<bean id="afterInterceptorsInterceptor" class="net.paoding.rose.web.impl.thread.AfterInterceptorsInterceptor" />
 
 </beans>

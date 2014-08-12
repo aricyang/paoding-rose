@@ -39,8 +39,7 @@ public class MappingFactory {
         }
         if (path.length() > 1 && path.endsWith("/")) {
             if (path.endsWith("//")) {
-                throw new IllegalArgumentException("invalid path '" + path
-                        + "' : don't end with more than one '/'");
+                throw new IllegalArgumentException("invalid path '" + path + "' : don't end with more than one '/'");
             }
             path = path.substring(0, path.length() - 1);
         }
@@ -63,9 +62,8 @@ public class MappingFactory {
         for (int i = 0; i < chars.length; i++) {
             switch (chars[i]) {
                 case '$':
-                    if (i + 1 >= chars.length) {
-                        throw new IllegalArgumentException(//
-                                "invalid string '" + path + "', don't end with '$'");
+                    if (i+1 >= chars.length) {
+                        throw new IllegalArgumentException("invalid string '" + path + "', don't end with '$'");
                     }
                     // 针对constains$name的"constains"的
                     if (constantBegin >= 0) {
@@ -165,8 +163,8 @@ public class MappingFactory {
     private static Mapping createConstantMapping(//
             String userDefinedMapping, int constantBegin, int i) {
         if (constantBegin == i) {
-            throw new IllegalArgumentException(userDefinedMapping + "  constantBegin="
-                    + constantBegin);
+            throw new IllegalArgumentException(
+                    userDefinedMapping + "  constantBegin=" + constantBegin);
         }
         return new ConstantMapping(userDefinedMapping.substring(constantBegin, i));
     }

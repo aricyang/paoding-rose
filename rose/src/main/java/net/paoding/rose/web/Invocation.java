@@ -15,57 +15,54 @@
  */
 package net.paoding.rose.web;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import net.paoding.rose.web.annotation.Param;
 import net.paoding.rose.web.impl.thread.AfterCompletion;
 import net.paoding.rose.web.paramresolver.ParamMetaData;
 import net.paoding.rose.web.paramresolver.ParamResolver;
 import net.paoding.rose.web.var.Flash;
 import net.paoding.rose.web.var.Model;
-
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.WebApplicationContext;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Set;
 
 /**
  * {@link Invocation} 封装框架对控制器方法的一次调用相关的信息：请求和响应对象、目标控制器方法、方法参数值等。
  * <p>
- * 可以在控制器方法参数类似如下声明这个调用对象，获取之:<br>
- * <code>
- * public String get(Invocation inv) {
- *     return &quot;@hello, get!&quot;;
- * }
- * </code>
+ *   可以在控制器方法参数类似如下声明这个调用对象，获取之:<br>
+ *   <code>
+ *   public String get(Invocation inv) {
+ *       return &quot;@hello, get!&quot;;
+ *   }
+ *   </code>
  * <p>
  * 
- * 当不存在请求转发，一个用户请求只存在一个调用实例；当用户请求可能被转发时，转发前和转发后的控制器方法调用是不同的调用，
- * 则一个用户请求将不只包含了一个调用实例。可以通过 {@link Invocation#getPreInvocation()}
- * 获取该调用inv的前一个调用preinv。
+ *   当不存在请求转发，一个用户请求只存在一个调用实例；
+ *   当用户请求可能被转发时，转发前和转发后的控制器方法调用是不同的调用，则一个用户请求将不只包含了一个调用实例。
+ *   可以通过{@link Invocation#getPreInvocation()}获取该调用inv的前一个调用preinv。
  * <p>
  * 
- * 在参数解析器{@link ParamResolver}、验证器{@link ParamValidator}、拦截器
- * {@link ControllerInterceptor} 的接口方法实现中可以得到当前调用inv实例，使可以获取此此调用的信息进行控制。
+ *   在参数解析器{@link ParamResolver}、验证器{@link ParamValidator}、拦截器{@link ControllerInterceptor}
+ *   的接口方法实现中可以得到当前调用inv实例，使可以获取此此调用的信息进行控制。
  * <p>
  * 
- * 如果需要在参数验证器、拦截器、控制器之间传递仅在本次调用可见、和视图渲染无关的一些参数时，请使用
- * {@link #setAttribute(String, Object)}和 {@link #getAttribute(String)}
- * 方法。如果某个数据要渲染发送给客户端，请使用 {@link #addModel(String, Object)}。
+ *   如果需要在参数验证器、拦截器、控制器之间传递仅在本次调用可见、和视图渲染无关的一些参数时，
+ *   请使用{@link #setAttribute(String, Object)}和 {@link #getAttribute(String)}方法。
+ *   如果某个数据要渲染发送给客户端，请使用 {@link #addModel(String, Object)}。
  * <p>
  * 
- * {@link #addModel(String, Object)}和{@link #setAttribute(String, Object)}
- * 的区别:
+ * {@link #addModel(String, Object)}和{@link #setAttribute(String, Object)}的区别:
  * 
  * <ul>
- * <li>他们各自采用独立容器存储数据，互相不混淆。</li>
- * <li>addModel的数据可以被后续的调用的getModel方法“看见”，而setAttribute的数据不能被后面调用的
- * getAttribute方法“看见”</li>
+ *   <li>他们各自采用独立容器存储数据，互相不混淆。</li>
+ *   <li>addModel的数据可以被后续的调用的getModel方法“看见”，
+ *   而setAttribute的数据不能被后面调用的getAttribute方法“看见”</li>
  * </ul>
  * <p>
  * 

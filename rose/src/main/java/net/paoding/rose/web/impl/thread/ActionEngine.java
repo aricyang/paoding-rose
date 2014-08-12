@@ -15,49 +15,33 @@
  */
 package net.paoding.rose.web.impl.thread;
 
-import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
-
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import net.paoding.rose.RoseVersion;
 import net.paoding.rose.util.RoseStringUtil;
-import net.paoding.rose.web.ControllerInterceptor;
-import net.paoding.rose.web.InterceptorDelegate;
-import net.paoding.rose.web.Invocation;
-import net.paoding.rose.web.InvocationChain;
-import net.paoding.rose.web.ParamValidator;
-import net.paoding.rose.web.RequestPath;
+import net.paoding.rose.web.*;
 import net.paoding.rose.web.annotation.HttpFeatures;
 import net.paoding.rose.web.annotation.IfParamExists;
 import net.paoding.rose.web.annotation.Intercepted;
 import net.paoding.rose.web.annotation.Return;
 import net.paoding.rose.web.impl.module.Module;
 import net.paoding.rose.web.impl.validation.ParameterBindingResult;
-import net.paoding.rose.web.paramresolver.MethodParameterResolver;
-import net.paoding.rose.web.paramresolver.ParamMetaData;
-import net.paoding.rose.web.paramresolver.ParamResolver;
-import net.paoding.rose.web.paramresolver.ParameterNameDiscovererImpl;
-import net.paoding.rose.web.paramresolver.ResolverFactoryImpl;
-
+import net.paoding.rose.web.paramresolver.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.SpringVersion;
 import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import static org.springframework.validation.BindingResult.MODEL_KEY_PREFIX;
 
 /**
  * @author 王志亮 [qieqie.wang@gmail.com]
@@ -151,15 +135,15 @@ public final class ActionEngine implements Engine {
 
     private InterceptorDelegate[] compileInterceptors() {
         List<InterceptorDelegate> interceptors = module.getInterceptors();
-        List<InterceptorDelegate> registeredInterceptors = new ArrayList<InterceptorDelegate>(
-                interceptors.size());
+        List<InterceptorDelegate> registeredInterceptors = new ArrayList<InterceptorDelegate>(interceptors.size());
         for (InterceptorDelegate interceptor : interceptors) {
 
             ControllerInterceptor most = InterceptorDelegate.getMostInnerInterceptor(interceptor);
 
             if (!most.getClass().getName().startsWith("net.paoding.rose.web")) {
 
-                // 获取@Intercepted注解 (@Intercepted注解配置于控制器或其方法中，决定一个拦截器是否应该拦截之。没有配置按“需要”处理)
+                // 获取@Intercepted注解
+                // (@Intercepted注解配置于控制器或其方法中，决定一个拦截器是否应该拦截之。没有配置按“需要”处理)
                 Intercepted intercepted = method.getAnnotation(Intercepted.class);
                 if (intercepted == null) {
                     // 对于标注@Inherited的annotation，class.getAnnotation可以保证：如果本类没有，自动会从父类判断是否具有
@@ -207,8 +191,8 @@ public final class ActionEngine implements Engine {
                     + "=(" + registeredInterceptors.size() + "/" + interceptors.size() + ")"
                     + registeredInterceptors);
         }
-        return registeredInterceptors
-                .toArray(new InterceptorDelegate[registeredInterceptors.size()]);
+        return registeredInterceptors.toArray(
+                new InterceptorDelegate[registeredInterceptors.size()]);
 
     }
 
@@ -417,8 +401,7 @@ public final class ActionEngine implements Engine {
                 instruction = validators[i].validate(//
                         metaDatas[i], inv, methodParameters[i], errors);
                 if (logger.isDebugEnabled()) {
-                    logger.debug("do validate [" + validators[i].getClass().getName()
-                            + "] and return '" + instruction + "'");
+                    logger.debug("do validate [" + validators[i].getClass().getName() + "] and return '" + instruction + "'");
                 }
                 // 如果返回的instruction不是null、boolean或空串==>杯具：流程到此为止！
                 if (instruction != null) {
@@ -468,8 +451,7 @@ public final class ActionEngine implements Engine {
                 Object instruction = interceptor.roundInvocation(rose.getInvocation(), this);
                 //
                 if (debugEnabled) {
-                    logger.debug("interceptor[" + interceptor.getName() + "] do round and return '"
-                            + instruction + "'");
+                    logger.debug("interceptor[" + interceptor.getName() + "] do round and return '" + instruction + "'");
                 }
 
                 // 拦截器返回null的，要恢复为原instruction
@@ -484,8 +466,8 @@ public final class ActionEngine implements Engine {
                     applyHttpFeatures(rose.getInvocation());
                 }
 
-                this.instruction = method.invoke(controller, rose.getInvocation()
-                        .getMethodParameters());
+                this.instruction = method.invoke(controller,
+                        rose.getInvocation().getMethodParameters());
 
                 // @Return
                 if (this.instruction == null) {
@@ -523,8 +505,7 @@ public final class ActionEngine implements Engine {
         if (StringUtils.isNotBlank(httpFeatures.charset())) {
             response.setCharacterEncoding(httpFeatures.charset());
             if (logger.isDebugEnabled()) {
-                logger.debug("set response.characterEncoding by HttpFeatures:"
-                        + httpFeatures.charset());
+                logger.debug("set response.characterEncoding by HttpFeatures:" + httpFeatures.charset());
             }
         }
         if (StringUtils.isNotBlank(httpFeatures.contentType())) {

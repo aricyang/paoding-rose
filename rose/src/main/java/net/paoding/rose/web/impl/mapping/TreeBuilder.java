@@ -15,25 +15,16 @@
  */
 package net.paoding.rose.web.impl.mapping;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import net.paoding.rose.util.PrinteHelper;
 import net.paoding.rose.web.annotation.ReqMethod;
 import net.paoding.rose.web.impl.module.ControllerRef;
 import net.paoding.rose.web.impl.module.MethodRef;
 import net.paoding.rose.web.impl.module.Module;
-import net.paoding.rose.web.impl.thread.ActionEngine;
-import net.paoding.rose.web.impl.thread.ControllerEngine;
-import net.paoding.rose.web.impl.thread.Engine;
-import net.paoding.rose.web.impl.thread.LinkedEngine;
-import net.paoding.rose.web.impl.thread.ModuleEngine;
-
+import net.paoding.rose.web.impl.thread.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.util.*;
 
 /**
  * 
@@ -45,7 +36,10 @@ public class TreeBuilder {
     protected static final Log logger = LogFactory.getLog(TreeBuilder.class);
 
     /*
-     * 构造一个树，树的结点是地址-资源映射，每个结点都能回答是否匹配一个字符串，每个匹配的节点都知道如何执行对该资源的操作.
+     * 构造一个树，树的结点是地址-资源映射，
+     *   每个结点都能回答是否匹配一个字符串，
+     *   每个匹配的节点都知道如何执行对该资源的操作.
+     *
      * 构造树的过程：
      *   识别组件==>求得他的资源定义==>判断是否已经创建了==>未创建的创建一个树结点==>已创建的找出这个结点
      *   ==>在这个资源增加相应的操作以及逻辑==>若是新建的结点把它加到树中，同时满足遍历、匹配顺序要求
@@ -65,30 +59,30 @@ public class TreeBuilder {
         List<Mapping> terms = MappingFactory.parse(module.getMappingPath());
         LinkedEngine rootEngine = rootNode.getMiddleEngines().getEngines(ReqMethod.GET)[0];
 
-        MappingNode parent = rootNode;
+        MappingNode parentNode = rootNode;
         for (Mapping mapping : terms) {
             if (mapping.getDefinition().length() == 0) {
                 continue;
             }
-            MappingNode temp = parent.getChild(mapping.getDefinition());
+            MappingNode temp = parentNode.getChild(mapping.getDefinition());
             if (temp == null) {
                 temp = new MappingNode(mapping);
-                parent.linkAsChild(temp);
+                parentNode.linkAsChild(temp);
             }
-            parent = temp;
+            parentNode = temp;
         }
-        LinkedEngine moduleEngine = new LinkedEngine(rootEngine, new ModuleEngine(module), parent);
-        parent.getMiddleEngines().addEngine(ReqMethod.ALL, moduleEngine);
+        LinkedEngine moduleEngine = new LinkedEngine(rootEngine, new ModuleEngine(module), parentNode);
+        parentNode.getMiddleEngines().addEngine(ReqMethod.ALL, moduleEngine);
 
         // controllers
         List<ControllerRef> controllers = module.getControllers();
         for (ControllerRef controller : controllers) {
-            addController(module, parent, moduleEngine, controller);
+            addController(module, parentNode, moduleEngine, controller);
         }
     }
 
-    private void addController(Module module, MappingNode moduleNode, LinkedEngine moduleEngine,
-            ControllerRef controller) {
+    private void addController(Module module, MappingNode moduleNode,
+                               LinkedEngine moduleEngine, ControllerRef controller) {
         //
         Engine engine = new ControllerEngine(module, controller);
 
@@ -122,7 +116,7 @@ public class TreeBuilder {
     }
 
     private void addAction(Module module, ControllerRef controller, MethodRef action,
-            MappingNode controllerNode, LinkedEngine controllerEngine) {
+                           MappingNode controllerNode, LinkedEngine controllerEngine) {
         Map<String, Set<ReqMethod>> mappingPaths = action.getMappings();
         if (mappingPaths.size() == 0) {
             return;

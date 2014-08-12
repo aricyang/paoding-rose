@@ -15,14 +15,8 @@
 */
 package net.paoding.rose.scanning.context;
 
-import java.io.IOException;
-import java.util.Arrays;
-
-import javax.servlet.ServletContext;
-
 import net.paoding.rose.scanning.LoadScope;
 import net.paoding.rose.scanning.context.core.RoseResources;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.BeanFactoryUtils;
@@ -36,6 +30,10 @@ import org.springframework.context.annotation.AnnotationConfigUtils;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.context.support.XmlWebApplicationContext;
+
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * 
@@ -77,9 +75,9 @@ public class RoseWebAppContext extends XmlWebApplicationContext {
         return beanType.cast(BeanFactoryUtils.beanOfTypeIncludingAncestors(this, beanType));
     }
 
+    // TODO: will be call backed by Spring
     @Override
-    protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException,
-            IOException {
+    protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException, IOException {
         Resource[] configResources = getConfigResourcesThrows();
         if (configResources != null) {
             reader.loadBeanDefinitions(configResources);

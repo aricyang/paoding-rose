@@ -27,7 +27,8 @@ public class MatchResultImpl implements MatchResult {
 
     private MappingNode mappingNode;
 
-    /** 从结果字符串中得到的资源参数名(如果该资源使用了使用了参数化的映射地址) */
+    /** 从结果字符串中得到的资源参数名
+     * (如果该资源使用了使用了参数化的映射地址) */
     private String parameterName;
 
     /**
