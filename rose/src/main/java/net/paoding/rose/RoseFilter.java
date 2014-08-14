@@ -190,7 +190,7 @@ public class RoseFilter extends GenericFilterBean {
 
     /**
      * <pre>
-     * like: &quot;com.renren.myapp, com.renren.yourapp&quot; etc
+     *   like: &quot;com.renren.myapp, com.renren.yourapp&quot; etc
      * </pre>
      * 
      * @param load

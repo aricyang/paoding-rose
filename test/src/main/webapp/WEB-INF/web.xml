@@ -10,6 +10,12 @@
 		<param-value>1000</param-value>
 	</context-param>
 
+    <!-- partol config -->
+    <context-param>
+        <param-name>portalExecutorCorePoolSize</param-name>
+        <param-value>200</param-value>
+    </context-param>
+
     <listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>

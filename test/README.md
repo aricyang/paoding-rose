@@ -16,6 +16,16 @@ Rose
     Annotation则处理不经常变动的部分，比如一些数据或路径映射关系。
 
 
+关于模块(Module)
+    模块(Module)封装一个web模块资源的相关信息。
+    rose将每一个controllers包以及子包*各称为*一个web模块资源。
+        xxx.controllers是一个模块资源， xxx.controllers.subpkg是另外一个模块资源。
+        极端情况下，不同jar文件可能具有相同的 xxx.controllers包，rose会将他们进行区分，称为2个URL地址不同的web模块资源。
+
+    rose使用web模块资源(ModuleResource)用来构造web模块(ModuleResource)。
+
+
+
 Portal
     后台原理: 类似scala的并发算法，把数据分块，然后并发计算。
     前台效果也类似新浪微博使用的页面片段加载技术，为了保证用户的响应速度，先部分加载页面片段，逐步显示整个页面。

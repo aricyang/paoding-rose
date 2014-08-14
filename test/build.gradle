@@ -9,19 +9,21 @@ repositories {
     mavenLocal()
     mavenCentral()
 }*/
-/*
+
 dependencies {
+    compile project(':context')
     compile project(':rose')
     compile project(':jade')
+    compile project(':pipe')
     testCompile "junit:junit:4.7"
     compile "javax.servlet:servlet-api:2.4"
     compile "javax.servlet:jsp-api:2.0"
     compile "com.metaparadigm:json-rpc:1.0"
-}*/
+}
 
 task p(dependsOn: war) << {
     copy {
         from 'build/libs'
-        into '/home/aric/software/resin/webapps'
+        into '/home/fei/software/resin/webapps'
     }
 }
