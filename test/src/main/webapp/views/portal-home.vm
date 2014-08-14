@@ -1,0 +1,24 @@
+<html>
+<head>
+    <link href="/static/portal.css" rel="stylesheet" type="text/css" media="all" />
+    <title>Portal</title>
+</head>
+
+<body>
+<h2>Portal</h2>
+
+<div class="window">
+    <div class="title">天气</div>
+    <!--这里使用$weather的"weather"即是第一个window的标识-->
+    <div class="content">$weather</div>
+</div>
+
+
+<div class="window">
+    <div class="title">待做</div>
+    <!--$todo实际是一个Window对象，velocity会调用其toString()输出html的-->
+    <div class="content">$todo</div>
+</div>
+
+</body>
+</html>

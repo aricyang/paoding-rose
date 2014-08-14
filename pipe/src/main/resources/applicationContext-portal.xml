@@ -31,11 +31,12 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 		class="net.paoding.rose.web.portal.impl.MergeWindowAttributesToModelInterceptor" />
 
 	<!--
-		portalBeanPostProcessor读取web.xml的配置，初始化portalExecutor中的参数，以及从applicationContext识别WindowListener对象进行登记添加
+		portalBeanPostProcessor读取web.xml的配置，
+		    初始化portalExecutor中的参数，
+		    以及从applicationContext识别WindowListener对象进行登记添加
 	-->
 
-	<bean id="rose.portalBeanPostProcessor"
-		class="net.paoding.rose.web.portal.impl.PortalBeanPostProcessor" />
+	<bean id="rose.portalBeanPostProcessor" class="net.paoding.rose.web.portal.impl.PortalBeanPostProcessor" />
 
 	<bean id="rose.portalFactory" class="net.paoding.rose.web.portal.impl.PortalFactoryDelegate">
 		<property name="portalFactoryName" value="rose.laziedPortalFactoryTaget" />
@@ -46,11 +47,9 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 		<property name="windowListener" ref="rose.windowListeners" />
 	</bean>
 
-	<bean id="rose.portalExecutorService"
-		class="net.paoding.rose.web.portal.impl.ThreadPoolExcutorServiceFactoryBean">
+	<bean id="rose.portalExecutorService" class="net.paoding.rose.web.portal.impl.ThreadPoolExcutorServiceFactoryBean">
 		<property name="threadPoolTaskExecutor">
-			<bean id="portalExecutor"
-				class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" />
+			<bean id="portalExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" />
 		</property>
 	</bean>
 
@@ -61,6 +60,5 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 	<util:list id="rose.windowListenerList">
 		<bean class="net.paoding.rose.web.portal.WindowLoggerListener" />
 	</util:list>
-
 
 </beans>

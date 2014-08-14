@@ -56,8 +56,7 @@ public class PortalBeanPostProcessor implements BeanPostProcessor, ApplicationCo
     }
 
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName)
-            throws BeansException {
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
         if (applicationContext instanceof WebApplicationContext) {
             WebApplicationContext webApplicationContext = (WebApplicationContext) applicationContext;
@@ -67,8 +66,7 @@ public class PortalBeanPostProcessor implements BeanPostProcessor, ApplicationCo
                         .getInitParameter(PORTAL_EXECUTOR_CORE_POOL_SIZE);
                 if (StringUtils.isNotBlank(paramCorePoolSize)) {
                     if (logger.isInfoEnabled()) {
-                        logger.info("found param " + PORTAL_EXECUTOR_CORE_POOL_SIZE + "="
-                                + paramCorePoolSize);
+                        logger.info("found param " + PORTAL_EXECUTOR_CORE_POOL_SIZE + "=" + paramCorePoolSize);
                     }
                     executor.setCorePoolSize(Integer.parseInt(paramCorePoolSize));
                 } else {
@@ -79,8 +77,7 @@ public class PortalBeanPostProcessor implements BeanPostProcessor, ApplicationCo
                         .getInitParameter(PORTAL_EXECUTOR_MAX_POOL_SIZE);
                 if (StringUtils.isNotBlank(paramMaxPoolSize)) {
                     if (logger.isInfoEnabled()) {
-                        logger.info("found param " + PORTAL_EXECUTOR_MAX_POOL_SIZE + "="
-                                + paramMaxPoolSize);
+                        logger.info("found param " + PORTAL_EXECUTOR_MAX_POOL_SIZE + "=" + paramMaxPoolSize);
                     }
                     executor.setMaxPoolSize(Integer.parseInt(paramMaxPoolSize));
                 }

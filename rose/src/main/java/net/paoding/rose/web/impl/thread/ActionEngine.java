@@ -243,7 +243,7 @@ public final class ActionEngine implements Engine {
                         }
 
                         //规则中没有约束参数值，所以只要存在就ok
-                        if (paramValues != null && paramValues.length > 0) {
+                        if (paramValues!=null && paramValues.length>0) {
                             return 10;
                         } else {
                             return -1;
@@ -466,6 +466,7 @@ public final class ActionEngine implements Engine {
                     applyHttpFeatures(rose.getInvocation());
                 }
 
+                // callabke controller method!
                 this.instruction = method.invoke(controller,
                         rose.getInvocation().getMethodParameters());
 

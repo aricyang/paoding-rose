@@ -169,11 +169,12 @@ public class Rose implements EngineChain {
         }
 
         // bind engines
+        // 从对应当前request的权值最大的leafEngine处开始构建相关的this.engines
         LinkedEngine tempEngine = leafEngine;
         MappingNode moduleNode = null;
         MappingNode controllerNode = null;
         while (tempEngine != null) {
-            engines.add(tempEngine);
+            engines.add(tempEngine); // 最先传入的是ActionEngine
             Class<? extends Engine> target = tempEngine.getTarget().getClass();
             if (target == ModuleEngine.class) {
                 moduleNode = tempEngine.getNode();
@@ -182,6 +183,7 @@ public class Rose implements EngineChain {
             }
             tempEngine = tempEngine.getParent();
         }
+
         // set module/controller/action path to RequsetPath object
         StringBuilder sb = new StringBuilder(path.getUri().length());
         MatchResult moduleMatchResult = null;
@@ -276,6 +278,10 @@ public class Rose implements EngineChain {
         return true;
     }
 
+    /**
+     * 从engines中选择权值最大的engine
+     * (权值的算法，参看ActionEngine)
+     */
     private LinkedEngine select(LinkedEngine[] engines) {
         LinkedEngine selectedEngine = null;
         int score = 0;

@@ -97,12 +97,10 @@ public class RootEngine implements Engine {
         if (request.getCharacterEncoding() == null) {
             request.setCharacterEncoding("UTF-8");
             if (logger.isDebugEnabled()) {
-                logger.debug("set request.characterEncoding by default:"
-                        + request.getCharacterEncoding());
+                logger.debug("set request.characterEncoding by default:" + request.getCharacterEncoding());
             }
         }
 
-        //
         final RequestPath requestPath = inv.getRequestPath();
 
         // save before include
@@ -110,7 +108,6 @@ public class RootEngine implements Engine {
             saveAttributesBeforeInclude(inv);
             // 恢复include请求前的各种请求属性(包括Model对象)
             rose.addAfterCompletion(new AfterCompletion() {
-
                 @Override
                 public void afterCompletion(Invocation inv, Throwable ex) throws Exception {
                     restoreRequestAttributesAfterInclude(inv);
@@ -123,6 +120,8 @@ public class RootEngine implements Engine {
         inv.addModel("ctxpath", requestPath.getCtxpath());
 
         // instruction是控制器action方法的返回结果或其对应的Instruction对象(也可能是拦截器、错误处理器返回的)
+        // 这里采用从参数传入rose对象，在RootEngine中进行遍历的方式
+        // 最终在ActionEngine中对method进行callback，并返回结果(instruction)
         Object instruction = rose.doNext();
 
         if (Thread.currentThread().isInterrupted()) {
@@ -176,8 +175,8 @@ public class RootEngine implements Engine {
         HttpServletRequest request = inv.getRequest();
 
         @SuppressWarnings("unchecked")
-        Map<String, Object> attributesSnapshot = (Map<String, Object>) inv
-                .getAttribute("$$paoding-rose.attributesBeforeInclude");
+        Map<String, Object> attributesSnapshot = (Map<String, Object>)
+                inv.getAttribute("$$paoding-rose.attributesBeforeInclude");
 
         // Need to copy into separate Collection here, to avoid side effects
         // on the Enumeration when removing attributes.

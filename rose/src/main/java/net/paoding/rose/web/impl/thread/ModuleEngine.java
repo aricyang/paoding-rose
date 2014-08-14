@@ -116,6 +116,7 @@ public class ModuleEngine implements Engine {
         boolean isMultiPartRequest = false;
         try {
             isMultiPartRequest = checkMultipart(inv);
+            // 这里采用从参数传入rose对象，在ModuleEngine中进行遍历
             return rose.doNext();
         } catch (Throwable invException) {
             // 抛出异常了(可能是拦截器或控制器抛出的)，此时让该控制器所在模块的ControllerErrorHanlder处理
