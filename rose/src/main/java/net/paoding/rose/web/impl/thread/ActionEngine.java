@@ -396,9 +396,9 @@ public final class ActionEngine implements Engine {
         ParamMetaData[] metaDatas = methodParameterResolver.getParamMetaDatas();
         // validators
         for (int i = 0; i < this.validators.length; i++) {
-            if (validators[i] != null && !(methodParameters[i] instanceof Errors)) {
+            if (validators[i]!=null && !(methodParameters[i] instanceof Errors)) {
                 Errors errors = inv.getBindingResult(parameterNames[i]);
-                instruction = validators[i].validate(//
+                instruction = validators[i].validate(
                         metaDatas[i], inv, methodParameters[i], errors);
                 if (logger.isDebugEnabled()) {
                     logger.debug("do validate [" + validators[i].getClass().getName() + "] and return '" + instruction + "'");
@@ -416,10 +416,10 @@ public final class ActionEngine implements Engine {
             }
         }
         
-        //
         for (int i = 0; i < parameterNames.length; i++) {
-            if (parameterNames[i] != null && methodParameters[i] != null
+            if (parameterNames[i]!=null && methodParameters[i]!=null
                     && inv.getModel().get(parameterNames[i]) != methodParameters[i]) {
+                // 将对象加入到MVC中的Model中作为一个属性，通过它传递给View
                 inv.addModel(parameterNames[i], methodParameters[i]);
             }
         }
@@ -466,7 +466,7 @@ public final class ActionEngine implements Engine {
                     applyHttpFeatures(rose.getInvocation());
                 }
 
-                // callabke controller method!
+                // Callabke controller method!
                 this.instruction = method.invoke(controller,
                         rose.getInvocation().getMethodParameters());
 

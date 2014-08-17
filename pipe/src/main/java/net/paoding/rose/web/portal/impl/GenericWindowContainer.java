@@ -127,7 +127,6 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         WindowCallback callback = null;
         if (attributes != null && attributes.size() > 0) {
             callback = new WindowCallback() {
-
                 @Override
                 public void beforeSubmit(Window window) {
                     synchronized (attributes) {
@@ -164,7 +163,7 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         synchronized (windows) {
             this.windows.add(windowInView);
         }
-        // for render
+        // For render
         this.invocation.addModel(name, windowInView);
 
         if (callback != null) {
@@ -175,6 +174,7 @@ public abstract class GenericWindowContainer implements WindowRender, WindowCont
         onWindowAdded(window);
 
         // 提交到执行服务中执行
+
         WindowFuture<?> future = submitWindow(this.executorService, task);
         window.setFuture(future);
 

@@ -178,8 +178,7 @@ public class PipeImpl extends GenericWindowContainer implements Pipe {
 
     private synchronized void fire(Window window) throws IOException {
         if (!super.windows.contains(window)) {
-            throw new IllegalArgumentException(//
-                    "not a register piped window '" + window.getName() + "'");
+            throw new IllegalArgumentException("not a register piped window '" + window.getName() + "'");
         }
         if (state < 0) {
             if (logger.isDebugEnabled()) {
@@ -192,8 +191,7 @@ public class PipeImpl extends GenericWindowContainer implements Pipe {
             } else {
                 if (blocking.contains(window)) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("firing '" + window.getName()
-                                + "' : has been add to waiting list");
+                        logger.debug("firing '" + window.getName() + "' : has been add to waiting list");
                     }
                     return;
                 }
@@ -219,8 +217,7 @@ public class PipeImpl extends GenericWindowContainer implements Pipe {
             latch.countDown();
         }
         if (logger.isDebugEnabled()) {
-            logger.debug(//
-                    "firing '" + window.getName() + "' : done  content=" + window.getContent());
+            logger.debug("firing '" + window.getName() + "' : done  content=" + window.getContent());
         }
     }
 

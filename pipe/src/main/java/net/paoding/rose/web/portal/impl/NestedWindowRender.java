@@ -55,6 +55,9 @@ public final class NestedWindowRender implements WindowRender {
 
     @Override
     public void render(Writer out, Window w) throws IOException {
+
+        System.out.println(String.format("====线程信息[%s.%s()]: %s", getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), Thread.currentThread().getName()));
+
         WindowRender render = this.innerRender;
         if (render == null) {
             render = simpleRender;
@@ -65,8 +68,7 @@ public final class NestedWindowRender implements WindowRender {
         WindowImpl window = (WindowImpl) w;
         if (window.getContentLength() >= 0) {
             if (logger.isDebugEnabled()) {
-                logger.debug("rendering window: " + window.getPath() + "; contentLength="
-                        + window.getContentLength());
+                logger.debug("rendering window: " + window.getPath() + "; contentLength=" + window.getContentLength());
             }
             render.render(out, window);
             return;

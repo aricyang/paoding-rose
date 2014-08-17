@@ -91,7 +91,7 @@ public class ControllerInterceptorAdapter implements Named, Ordered, ControllerI
         Object instruction = this.before(inv);
 
         // break the invocation?
-        if (instruction != null && !Boolean.TRUE.equals(instruction)) {
+        if (instruction!=null && !Boolean.TRUE.equals(instruction)) {
 
             // if false, don't render anything
             if (Boolean.FALSE.equals(instruction)) {
@@ -103,7 +103,7 @@ public class ControllerInterceptorAdapter implements Named, Ordered, ControllerI
         // next
         instruction = round(inv, chain);
 
-        // after
+        // after (if has portal, test done or block wait!)
         return after(inv, instruction);
     }
 

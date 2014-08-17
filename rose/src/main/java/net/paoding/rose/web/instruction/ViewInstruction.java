@@ -80,7 +80,7 @@ public class ViewInstruction extends AbstractInstruction {
 
             if (!Thread.interrupted()) {
                 inv.addModel(ROSE_INVOCATION, inv);
-                // 最终由Sring view进行页面渲染
+                // 最终由Spring view进行页面渲染
                 view.render(inv.getModel().getAttributes(), request, response);
             } else {
                 logger.info("interrupted");

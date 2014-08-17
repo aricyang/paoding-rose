@@ -21,7 +21,11 @@ import java.util.Map;
 import java.util.concurrent.Future;
 
 /**
- * {@link Window}封装了一个portal下的窗口信息，包括该窗口的名字、请求地址以及处理完后最终的响应状态和页面文本内容。
+ * {@link Window}封装了一个portal下的窗口信息，包括：
+ *     该窗口的名字、
+ *     请求地址
+ *     以及处理完后最终的响应状态和
+ *     页面文本内容。
  * <p>
  * 
  * @author 王志亮 [qieqie.wang@gmail.com]

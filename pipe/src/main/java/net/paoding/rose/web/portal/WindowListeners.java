@@ -74,8 +74,8 @@ public class WindowListeners implements WindowListener {
 
     @Override
     public void onWindowStarted(Window window) {
-        for (WindowListener l : listeners) {
-            l.onWindowStarted(window);
+        for (WindowListener wl : listeners) {
+            wl.onWindowStarted(window);
         }
     }
 

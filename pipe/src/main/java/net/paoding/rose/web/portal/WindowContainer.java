@@ -37,9 +37,10 @@ import net.paoding.rose.web.portal.impl.PortalResolver;
  * <strong>*编程接口*</strong>
  * 
  * <pre>
- * 1、在控制器方法上声明一个Portal或Pipe参数，比如public String index(Portal portal)、public String home(Pipe pipe);
+ * 1、在控制器方法上声明一个Portal或Pipe参数，比如：
+ *      public String index(Portal portal)、public String home(Pipe pipe);
  * 2、portal/pipe参数和Invocation等其他各种参数可以同时存在，portal和pipe也可以同时存在;
- * 3、在方法中，你可以不断地调用 {@link #addWindow(String name, String path)} 方法增加给定地址的窗口；
+ * 3、在方法中，你可以不断地调用{@link #addWindow(String name, String path)}方法增加给定地址的窗口；
  * </pre>
  * <p>
  * 
@@ -55,7 +56,8 @@ import net.paoding.rose.web.portal.impl.PortalResolver;
  * 
  * <pre>
  * 1、portal/pipe参数由框架完成创建，你只需要将Portal声明为方法的参数即可；
- * 2、rose框架提供了 {@link ParamResolver}接口，portal/pipe提供了该接口的实现 {@link PortalResolver} / {@link PipeResolver}，并配置到 jar 包中的 applicatonContext*.xml，使得rose框架能够识别
+ * 2、rose框架提供了{@link ParamResolver}接口，portal/pipe提供了该接口的实现{@link PortalResolver} / {@link PipeResolver}，
+ *     并配置到jar包中的 applicatonContext*.xml，使得rose框架能够识别
  * 3、对于portal，虽然一个portal参数的生命周期直到页面渲染结束来完成，但如果您在多个控制器方法中声明Portal参数，请求在这些方法之间转发，这些Portal是不同的对象。
  * 4、对于pipe，一次用户请求可以在多个控制器方法之间转发，但在整个转发链条中只能存现一次pipe参数；
  * </pre>
@@ -64,11 +66,14 @@ import net.paoding.rose.web.portal.impl.PortalResolver;
  * <strong>*关于window的执行*</strong>
  * 
  * <pre>
- * 1、当一个window加入到portal/pipe时，portal/pipe便会调用每个web应用唯一的executorService执行该window，不同的portal/pipe调用的都是同一个executorService;
- * 2、由于executorService使用的是线程池实现，所以window的执行不由web容器“主线程”执行(通常其线程名以http开始)，而是由名称以portalExecutor开头的线程执行;
+ * 1、当一个window加入到portal/pipe时，portal/pipe便会调用每个web应用唯一的executorService执行该window，
+ *    不同的portal/pipe调用的都是同一个executorService;
+ * 2、由于executorService使用的是线程池实现，所以window的执行不由web容器“主线程”执行(通常其线程名以http开始)，
+ *    而是由名称以portalExecutor开头的线程执行;
  * 3、在产品环境下，window的执行时候都会长于portal/pipe控制器本身的执行时间，portal/pipe需要这协调这些时间关系;
  * 4、如果您使用的是portal，框架会保证让主控制器等待所有窗口流程都执行完毕之后才向客户端吐页面内容；
- * 5、如果您使用的是pipe，框架会把主控制器所返回的整体页面框架先输出给客户端，并保持连接不断开，当某个窗口的流程执行完毕，框架再将该窗口返回的页面数据通过那个没有断开的连接吐给客户端；
+ * 5、如果您使用的是pipe，框架会把主控制器所返回的整体页面框架先输出给客户端，并保持连接不断开，
+ *    当某个窗口的流程执行完毕，框架再将该窗口返回的页面数据通过那个没有断开的连接吐给客户端；
  * 
  * <pre>
  * 
@@ -179,9 +184,9 @@ public interface WindowContainer {
      * 
      * @param name 窗口的名字
      * @param windowPath 这个参数表示窗口的地址，可以包含参数比如xxx?a=b; <br>
-     *        如果地址以'/'开始表示相对于该web应用的根路径(注意：这里是指该应用的根路径，而非跳脱之外的host:
-     *        port下的根路径)<br>
-     *        如果地址不一'/'开始表示相对当前的请求的URI地址<br>
+     *        如果地址以'/'开始表示相对于该web应用的根路径
+     *        (注意：这里是指该应用的根路径，而非跳脱之外的host:port下的根路径)<br>
+     *        如果地址不以'/'开始表示相对当前的请求的URI地址<br>
      *        这个地址<strong>*不能*</strong>是其他远程地址，比如http://host:port/somepath
      * @return
      */

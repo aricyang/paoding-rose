@@ -11,7 +11,8 @@
 	</uri>
 	<tag>
 		<name>write</name>
-		<tagclass>net.paoding.rose.web.portal.taglibs.PipeWriteTag
+		<tagclass>
+            net.paoding.rose.web.portal.taglibs.PipeWriteTag
 		</tagclass>
 		<bodycontent>JSP</bodycontent>
 	</tag>

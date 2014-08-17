@@ -447,6 +447,8 @@ public class ModulesBuilderImpl implements ModulesBuilder {
     }
 
     private List<InterceptorDelegate> findInterceptors(XmlWebApplicationContext context) {
+        // 在这之前，Spring加在了在applicationContext-portal.xml, applicationContext-jade中
+        // 定义的各种bean (包括interceptor bean)
         String[] interceptorNames = SpringUtils.getBeanNames(
                 context.getBeanFactory(), ControllerInterceptor.class);
         ArrayList<InterceptorDelegate> interceptors = new ArrayList<InterceptorDelegate>(interceptorNames.length);

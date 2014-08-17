@@ -26,7 +26,7 @@ import net.paoding.rose.web.portal.Portal;
 import net.paoding.rose.web.portal.Window;
 
 /**
- * 
+ * Command Patten for WindowImpl ???
  * @author qieqie.wang@gmail.com
  * 
  */

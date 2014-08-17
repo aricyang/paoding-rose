@@ -55,7 +55,7 @@ final class WindowTask implements Runnable {
     @Override
     public void run() {
         try {
-            // started
+            // started (Just to log)
             window.getContainer().onWindowStarted(window);
 
             // doRequest
@@ -78,6 +78,8 @@ final class WindowTask implements Runnable {
                 window.getContainer().onWindowTimeout(window);
                 return;
             }
+
+            // 转移到对应的Window Handler处理
             rd.forward(request, this.response);
 
             // done!
@@ -88,7 +90,7 @@ final class WindowTask implements Runnable {
             window.getContainer().onWindowError(window);
         } finally {
             // remove request from ThreadLocal in PortalRequest 
-            // 销毁在PortalRequest的ThreadLocal成员变量中保存的与 当前线程相关的request对象，以防内存泄漏。
+            // 销毁在PortalRequest的ThreadLocal成员变量中保存的与当前线程相关的request对象，以防内存泄漏。
             final HttpServletRequest wrapper = window.getContainer().getRequest();
             final PortalRequest portalRequest = PortalRequest.unwrapPortalRequest(wrapper);
             portalRequest.setRequest(null);

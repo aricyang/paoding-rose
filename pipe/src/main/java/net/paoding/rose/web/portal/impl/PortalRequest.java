@@ -74,7 +74,6 @@ final class PortalRequest extends HttpServletRequestWrapper implements HttpServl
 
     /**
      * 构造子
-     * 
      */
     public PortalRequest(Portal portal, HttpServletRequest orginal) {
         super(new PrivateRequestWrapper(orginal));
@@ -83,12 +82,16 @@ final class PortalRequest extends HttpServletRequestWrapper implements HttpServl
     }
 
     /**
-     * 设置一个请求对象到这个包装器中， {@link PortalRequest} 将把这个请求对象关联给当前线程。
+     * 设置一个请求对象到这个包装器中，
+     * {@link PortalRequest}将把这个请求对象关联给当前线程。
      * <p>
      * 
      * 这个方法将由web容器(tomcat/resin等)调用
      */
     public void setRequest(ServletRequest request) {
+
+        System.out.println(String.format("====线程信息[%s.%s()]: %s", getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), Thread.currentThread().getName()));
+
         if (request != null) {
             if (logger.isDebugEnabled()) {
                 logger.debug(String.format("set request: %s", request));
@@ -113,7 +116,7 @@ final class PortalRequest extends HttpServletRequestWrapper implements HttpServl
         return request == null ? orginal : request;
     }
 
-    // ----- HttpServletRequestWrapper的每个方法都得重新覆盖，不解时请看ServletRequestWrapper的代码即知 ----
+    // ----- HttpServletRequestWrapper的每个方法都得重新覆盖，不解释请看ServletRequestWrapper的代码即知 ----
 
     @Override
     public RequestDispatcher getRequestDispatcher(String path) {

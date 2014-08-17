@@ -313,6 +313,9 @@ public class RoseFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, final ServletResponse response,
                          final FilterChain filterChain) throws IOException, ServletException {
+
+        System.out.println(String.format("====线程信息[%s.%s()]: %s", getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), Thread.currentThread().getName()));
+
         // cast
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final HttpServletResponse httpResponse = (HttpServletResponse) response;

@@ -26,14 +26,12 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 	<bean id="rose.portalWaitInterceptor" class="net.paoding.rose.web.portal.impl.PortalWaitInterceptor" />
 	<bean id="rose.windowCancelableSupportInterceptor" class="net.paoding.rose.web.portal.impl.WindowCancelableSupportInterceptor" />
 	<bean id="rose.pipeInterceptor" class="net.paoding.rose.web.portal.impl.PipeInterceptor" />
-
-	<bean id="rose.mergeWindowAttributesToModelInterceptor"
-		class="net.paoding.rose.web.portal.impl.MergeWindowAttributesToModelInterceptor" />
+	<bean id="rose.mergeWindowAttributesToModelInterceptor" class="net.paoding.rose.web.portal.impl.MergeWindowAttributesToModelInterceptor" />
 
 	<!--
-		portalBeanPostProcessor读取web.xml的配置，
-		    初始化portalExecutor中的参数，
-		    以及从applicationContext识别WindowListener对象进行登记添加
+		portalBeanPostProcessor
+		读取web.xml的配置，初始化portalExecutor中的参数，
+		以及从applicationContext识别WindowListener对象进行登记添加
 	-->
 
 	<bean id="rose.portalBeanPostProcessor" class="net.paoding.rose.web.portal.impl.PortalBeanPostProcessor" />

@@ -91,8 +91,8 @@ public class PortalBeanPostProcessor implements BeanPostProcessor, ApplicationCo
                     executor.setKeepAliveSeconds(Integer.parseInt(paramKeepAliveSeconds));
                 }
             } else if (List.class.isInstance(bean) && "portalListenerList".equals(beanName)) {
-                String paramListeners = webApplicationContext.getServletContext().getInitParameter(
-                        PORTAL_LISTENERS);
+                String paramListeners = webApplicationContext.getServletContext()
+                        .getInitParameter(PORTAL_LISTENERS);
                 @SuppressWarnings("unchecked")
                 List<WindowListener> list = (List<WindowListener>) bean;
                 if (StringUtils.isNotBlank(paramListeners)) {
@@ -105,8 +105,7 @@ public class PortalBeanPostProcessor implements BeanPostProcessor, ApplicationCo
                         if (className.length() > 0) {
                             try {
                                 Class<?> clazz = Class.forName(className);
-                                WindowListener l = (WindowListener) BeanUtils
-                                        .instantiateClass(clazz);
+                                WindowListener l = (WindowListener)BeanUtils.instantiateClass(clazz);
                                 list.add(l);
                                 if (logger.isInfoEnabled()) {
                                     logger.info("add portalListener: " + l);
