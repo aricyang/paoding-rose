@@ -140,6 +140,7 @@ public final class ActionEngine implements Engine {
 
             ControllerInterceptor most = InterceptorDelegate.getMostInnerInterceptor(interceptor);
 
+            // 处理用户自定义interceptor?
             if (!most.getClass().getName().startsWith("net.paoding.rose.web")) {
 
                 // 获取@Intercepted注解
@@ -442,6 +443,22 @@ public final class ActionEngine implements Engine {
             this.rose = rose;
         }
 
+        /**
+         * 注意：这里有个循环嵌套逻辑：
+         * 首先是ActionEngine.innerExecute()调用本doNext()函数
+         *  1. 先将index(对象属性)加1,从interceptors中遍历一个interceptor1
+         *  2. 将该interceptor1添加到rose的LinkedList<AfterCompletion>中，以备后用
+         *  3. 调用interceptor1.roundInvocation(rose.inv, this);
+         *  (实为调用ControllerInterceptorAdapter.roundInvocation)
+         *      在roundInvocation()中调用before(inv);
+         *      在roundInvocation()中调用instruction = round(inv, chain);
+         *          round()内部实际为：return chain.doNext();
+         *              (chain为上述传入的this，即此时将再次调用本doNext()函数，重新回到上面)
+         *                  1. 先将index(对象属性)加1,从interceptors中遍历一个interceptor2
+         *                  .....
+         * 具体运行流程参看processon
+         *
+         */
         @Override
         public Object doNext() throws Exception {
             if (++index < interceptors.length) { // ++index 用于将-1转化为0
