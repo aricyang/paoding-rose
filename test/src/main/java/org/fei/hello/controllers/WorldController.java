@@ -4,6 +4,7 @@ import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.annotation.Param;
 import net.paoding.rose.web.annotation.Path;
 import net.paoding.rose.web.annotation.rest.Get;
+import net.paoding.rose.web.annotation.rest.Post;
 
 @Path("world")
 public class WorldController {
@@ -16,7 +17,9 @@ public class WorldController {
     }
 
     @Get("list")
-    public String list(Invocation inv) {
+    @Post("list")
+    public String list(Invocation inv, @Param("id") long id) {
+        System.out.println(id);
         inv.addModel("worlds", worlds.split(","));
         return "world-list"; // refer: views/world-list.vm
     }
